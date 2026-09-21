@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Text Sweep demo</title>
+<link rel="stylesheet" href="../src/text-sweep/text-sweep.css">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: radial-gradient(120% 90% at 50% 0%, #163124 0%, #0b1410 60%, #070c0a 100%);
+    color: #f1f5f2;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { width: min(440px, 100%); }
+  h1 { font-size: 1.25rem; margin: 0 0 4px; }
+  p.lead { margin: 0 0 24px; color: #b6c4bb; line-height: 1.5; font-size: 0.9375rem; }
+  label { display: block; margin: 20px 0 4px; font-size: 0.875rem; color: #b6c4bb; }
+  .field input {
+    display: block;
+    padding: 8px 2px;
+    color: #f1f5f2;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #4a5a50;
+    border-radius: 0;
+    outline: none;
+  }
+  .field input:focus { border-bottom-color: #8fd3a0; }
+  .field input::placeholder { color: rgba(241, 245, 242, 0.5); }
+  .text-sweep-shell {
+    /* Set the font on the shell: the input and the overlay both inherit it, so they stay aligned. */
+    font-size: 1.125rem;
+    line-height: 1.6;
+    --text-sweep-color: #f1f5f2;
+    --text-sweep-caret-color: #f1f5f2;
+    --text-sweep-autofill-bg: #0b1410;
+  }
+  .tuned .text-sweep-shell {
+    --text-sweep-duration: 520ms;
+    --text-sweep-stagger: 55ms;
+    --text-sweep-distance: 160%;
+    --text-sweep-blur: 8px;
+    --text-sweep-color: #8fd3a0;
+  }
+  small { display: block; margin-top: 28px; color: #7f9186; font-size: 0.8125rem; line-height: 1.5; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Text Sweep</h1>
+  <p class="lead">Type, delete, paste, or use your browser's autofill. New characters sweep in; removed ones sweep out.</p>
+  <div id="root"></div>
+  <small>Turn on "Reduce motion" in your OS accessibility settings to see the plain-text fallback.</small>
+</main>
+<script src="./demo.js"></script>
+</body>
+</html>

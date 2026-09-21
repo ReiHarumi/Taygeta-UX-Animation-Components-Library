@@ -1,0 +1,55 @@
+{
+  "name": "taygeta-ux-animation-components",
+  "version": "0.1.0",
+  "description": "Small, dependency-free UX animation components for React. First component: Text Sweep, animated typing for text inputs.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "*.css"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./text-sweep.css": "./dist/text-sweep.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run build:js && npm run build:css && npm run build:types",
+    "build:js": "esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js --external:react --target=es2020 --sourcemap",
+    "build:css": "esbuild src/text-sweep/text-sweep.css --outfile=dist/text-sweep.css",
+    "build:types": "tsc -p tsconfig.build.json",
+    "demo": "esbuild demo/demo.tsx --bundle --format=iife --outfile=demo/demo.js --target=es2020 --define:process.env.NODE_ENV=\\\"development\\\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "esbuild": "^0.25.9",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "typescript": "^5.9.2"
+  },
+  "keywords": [
+    "react",
+    "animation",
+    "input",
+    "text",
+    "typing",
+    "ux"
+  ],
+  "author": "ReiHarumi",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ReiHarumi/Taygeta-UX-Animation-Components-Library.git"
+  }
+}

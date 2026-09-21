@@ -1,0 +1,124 @@
+/*
+ * Text Sweep: animated typing for text inputs.
+ *
+ * Tuning (set on .text-sweep-shell or any ancestor):
+ *   --text-sweep-color            overlay text color             (default: currentColor)
+ *   --text-sweep-caret-color      caret color                    (default: currentColor)
+ *   --text-sweep-duration         enter animation length         (default: 360ms)
+ *   --text-sweep-stagger          delay between characters       (default: 35ms)
+ *   --text-sweep-stagger-cap      characters that stagger        (default: 8)
+ *   --text-sweep-distance         how far characters travel      (default: 115%)
+ *   --text-sweep-blur             blur at the start of an enter  (default: 4px)
+ *   --text-sweep-inset-left       overlay left inset             (default: 2px)
+ *   --text-sweep-inset-right      overlay right inset            (default: 20px)
+ *   --text-sweep-autofill-bg      color that hides browser autofill paint (default: Canvas)
+ *
+ * The exit length comes from the `exitDuration` prop (default 220ms).
+ */
+
+.text-sweep-shell {
+  position: relative;
+  min-width: 0;
+}
+
+/* The input keeps typing, selection, caret and a11y; its text is hidden and the
+   overlay draws the animated copy. `font: inherit` keeps both in lockstep. */
+.text-sweep-shell > input {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  font: inherit;
+  letter-spacing: inherit;
+  box-sizing: border-box;
+}
+
+/* Only hide the text while there is a value, so a real placeholder still shows. */
+.text-sweep-shell > input:not(:placeholder-shown) {
+  color: transparent;
+  -webkit-text-fill-color: transparent !important;
+  caret-color: var(--text-sweep-caret-color, currentColor);
+}
+
+/* Browser autofill paints its own background and text; cover it. */
+.text-sweep-shell > input[data-autofilled="true"] {
+  background-color: transparent !important;
+  transition: none;
+  -webkit-box-shadow: 0 0 0 1000px var(--text-sweep-autofill-bg, Canvas) inset !important;
+  box-shadow: 0 0 0 1000px var(--text-sweep-autofill-bg, Canvas) inset !important;
+}
+
+/* Empty animations whose start/cancel events tell the component when autofill
+   begins or ends (browsers expose no event for it). */
+@keyframes text-sweep-autofill-start { from {} to {} }
+@keyframes text-sweep-autofill-cancel { from {} to {} }
+
+.text-sweep-shell > input:-webkit-autofill {
+  animation-name: text-sweep-autofill-start;
+}
+.text-sweep-shell > input:not(:-webkit-autofill) {
+  animation-name: text-sweep-autofill-cancel;
+}
+
+.text-sweep {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  left: var(--text-sweep-inset-left, 2px);
+  right: var(--text-sweep-inset-right, 20px);
+  top: 50%;
+  display: inline-flex;
+  overflow: hidden;
+  color: var(--text-sweep-color, currentColor);
+  font: inherit;
+  letter-spacing: inherit;
+  transform: translateY(-50%);
+  white-space: pre;
+}
+
+.text-sweep__char {
+  display: inline-block;
+  min-width: 0.01em;
+  animation: text-sweep-up var(--text-sweep-duration, 360ms) cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* Cap the per-character stagger so long values (a 40+ character email)
+     settle quickly instead of growing without bound. */
+  animation-delay: calc(min(var(--text-sweep-char-index), var(--text-sweep-stagger-cap, 8)) * var(--text-sweep-stagger, 35ms));
+  will-change: transform, opacity, filter;
+}
+
+.text-sweep__char[data-sweep-direction="down"] {
+  animation-name: text-sweep-down;
+}
+
+.text-sweep__char--exiting {
+  animation: text-sweep-exit var(--text-sweep-exit-duration, 220ms) cubic-bezier(0.4, 0, 1, 1) both;
+  animation-delay: 0ms;
+}
+
+@keyframes text-sweep-up {
+  from { opacity: 0; transform: translateY(var(--text-sweep-distance, 115%)); filter: blur(var(--text-sweep-blur, 4px)); }
+  60% { opacity: 1; filter: blur(0); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes text-sweep-down {
+  from { opacity: 0; transform: translateY(calc(var(--text-sweep-distance, 115%) * -1)); filter: blur(var(--text-sweep-blur, 4px)); }
+  60% { opacity: 1; filter: blur(0); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+@keyframes text-sweep-exit {
+  from { opacity: 1; transform: translateY(0); filter: blur(0); }
+  to { opacity: 0; transform: translateY(var(--text-sweep-distance, 115%)); filter: blur(var(--text-sweep-blur, 4px)); }
+}
+
+/* Reduced motion: drop the overlay and show the input's own text. */
+@media (prefers-reduced-motion: reduce) {
+  .text-sweep {
+    display: none;
+  }
+
+  .text-sweep-shell > input:not(:placeholder-shown) {
+    color: inherit;
+    -webkit-text-fill-color: currentColor !important;
+  }
+}
