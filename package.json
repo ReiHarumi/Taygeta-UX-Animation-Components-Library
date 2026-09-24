@@ -1,6 +1,6 @@
 {
   "name": "taygeta-ux-animation-components",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Small, dependency-free UX animation components for React. First component: Text Sweep, animated typing for text inputs.",
   "license": "MIT",
   "type": "module",
@@ -26,7 +26,8 @@
     "build:css": "esbuild src/text-sweep/text-sweep.css --outfile=dist/text-sweep.css",
     "build:types": "tsc -p tsconfig.build.json",
     "demo": "esbuild demo/demo.tsx --bundle --format=iife --outfile=demo/demo.js --target=es2020 --define:process.env.NODE_ENV=\\\"development\\\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepare": "npm run build"
   },
   "peerDependencies": {
     "react": ">=18"

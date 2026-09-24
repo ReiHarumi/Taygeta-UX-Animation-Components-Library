@@ -70,6 +70,12 @@ export type TextSweepProps = {
   direction?: SweepDirection;
   /** Exit animation length in ms. Also written to a CSS variable so they stay in sync. */
   exitDuration?: number;
+  /**
+   * Horizontal scroll offset in px. The characters shift left by this much
+   * inside the clipped overlay, so a long value follows the input's own
+   * scroll (SweepInput passes the input's `scrollLeft`).
+   */
+  scrollLeft?: number;
   className?: string;
 };
 
@@ -83,6 +89,7 @@ export function TextSweep({
   value,
   direction = "up",
   exitDuration = 220,
+  scrollLeft = 0,
   className,
 }: TextSweepProps) {
   const nextKeyRef = useRef(0);
@@ -205,6 +212,8 @@ export function TextSweep({
   const overlayStyle: OverlayStyle = {
     "--text-sweep-exit-duration": `${exitDuration}ms`,
   };
+  const trackStyle: CSSProperties | undefined =
+    scrollLeft !== 0 ? { transform: `translateX(${-scrollLeft}px)` } : undefined;
 
   return (
     <span
@@ -212,22 +221,24 @@ export function TextSweep({
       style={overlayStyle}
       aria-hidden="true"
     >
-      {chars.map((entry) => {
-        const style: SweepStyle = { "--text-sweep-char-index": entry.sweepIndex };
-        const charClassName = entry.exiting
-          ? "text-sweep__char text-sweep__char--exiting"
-          : "text-sweep__char";
-        return (
-          <span
-            className={charClassName}
-            style={style}
-            key={entry.key}
-            data-sweep-direction={entry.direction}
-          >
-            {entry.ch === " " ? " " : entry.ch}
-          </span>
-        );
-      })}
+      <span className="text-sweep__track" style={trackStyle}>
+        {chars.map((entry) => {
+          const style: SweepStyle = { "--text-sweep-char-index": entry.sweepIndex };
+          const charClassName = entry.exiting
+            ? "text-sweep__char text-sweep__char--exiting"
+            : "text-sweep__char";
+          return (
+            <span
+              className={charClassName}
+              style={style}
+              key={entry.key}
+              data-sweep-direction={entry.direction}
+            >
+              {entry.ch === " " ? " " : entry.ch}
+            </span>
+          );
+        })}
+      </span>
     </span>
   );
 }
