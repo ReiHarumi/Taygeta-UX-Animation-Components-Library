@@ -1,7 +1,16 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import type {
   AnimationEvent,
   InputHTMLAttributes,
+  MutableRefObject,
+  Ref,
   SyntheticEvent,
 } from "react";
 import { TextSweep } from "./TextSweep";
@@ -11,10 +20,23 @@ import type { SweepDirection } from "./TextSweep";
 const useIsomorphicLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
+// Point several refs (object or function) at the same node.
+function useMergedRef<T>(...refs: Array<Ref<T> | undefined>) {
+  // The refs array is the dependency list: a new ref re-creates the callback.
+  return useCallback((node: T | null) => {
+    for (const ref of refs) {
+      if (typeof ref === "function") ref(node);
+      else if (ref) (ref as MutableRefObject<T | null>).current = node;
+    }
+  }, refs);
+}
+
 export type SweepInputProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   "value" | "defaultValue"
 > & {
+  /** Reaches the underlying `<input>`, so you can focus or measure it. */
+  ref?: Ref<HTMLInputElement>;
   /** Controlled value (required). */
   value: string;
   /** Class for the wrapping element (the input keeps `className`). */
@@ -50,19 +72,25 @@ export type SweepInputProps = Omit<
  * Give the input and its wrapper the same font (the stylesheet sets
  * `font: inherit` on the input) so the overlay lines up with the caret.
  */
-export function SweepInput({
-  value,
-  shellClassName,
-  exitDuration,
-  autoInset = true,
-  reducedMotion = "respect",
-  onAnimationStart,
-  onScroll,
-  onSelect,
-  onKeyUp,
-  onClick,
-  ...inputProps
-}: SweepInputProps) {
+export const SweepInput = forwardRef<
+  HTMLInputElement,
+  Omit<SweepInputProps, "ref">
+>(function SweepInput(
+  {
+    value,
+    shellClassName,
+    exitDuration,
+    autoInset = true,
+    reducedMotion = "respect",
+    onAnimationStart,
+    onScroll,
+    onSelect,
+    onKeyUp,
+    onClick,
+    ...inputProps
+  },
+  forwardedRef,
+) {
   // "Adjust state while rendering" (https://react.dev/reference/react/useState):
   // the direction is derived from how the controlled value changed.
   const [previousValue, setPreviousValue] = useState(value);
@@ -71,6 +99,7 @@ export function SweepInput({
   const [scrollLeft, setScrollLeft] = useState(0);
   const shellRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const mergedInputRef = useMergedRef(inputRef, forwardedRef);
   const sweepOff = inputProps.type === "password";
 
   if (value !== previousValue) {
@@ -152,7 +181,7 @@ export function SweepInput({
     >
       <input
         {...inputProps}
-        ref={inputRef}
+        ref={mergedInputRef}
         value={value}
         data-autofilled={autofilled}
         onAnimationStart={handleAnimationStart}
@@ -171,4 +200,6 @@ export function SweepInput({
       )}
     </div>
   );
-}
+});
+
+SweepInput.displayName = "SweepInput";

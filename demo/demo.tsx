@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { SweepInput } from "../src";
 
@@ -10,18 +10,23 @@ function Demo() {
   const [long, setLong] = useState(
     "A long value that runs past the edge of the field, so the animated copy has to scroll with the caret",
   );
+  const nameRef = useRef<HTMLInputElement>(null);
 
   return (
     <>
       <div className="field">
         <label htmlFor="name">Name (starts with a value)</label>
         <SweepInput
+          ref={nameRef}
           id="name"
           name="name"
           autoComplete="name"
           value={name}
           onChange={(event) => setName(event.target.value)}
         />
+        <button type="button" onClick={() => nameRef.current?.focus()}>
+          Focus
+        </button>
       </div>
       <div className="field">
         <label htmlFor="email">Email (autofill-friendly)</label>

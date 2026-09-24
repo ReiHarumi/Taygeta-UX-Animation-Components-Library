@@ -72,6 +72,8 @@ function NameField() {
 | `autoInset` | `true` | Measure the input's content box and set `--text-sweep-inset-left/right` on the wrapper. Set `false` to control the insets with CSS. |
 | `reducedMotion` | `"respect"` | `"respect"` drops the overlay under `prefers-reduced-motion: reduce`. `"ignore"` keeps animating. |
 
+`ref` reaches the underlying `<input>`, so you can focus or measure it.
+
 With `type="password"` the overlay is never rendered and the input's own (masked) text shows; the wrapper gets `data-text-sweep="off"`.
 
 If you want the overlay without the input wrapper, use `TextSweep` directly: `<TextSweep value="Hello" direction="up" />`. Pass `scrollLeft` (px) to shift the characters left inside the clipped overlay. It is decorative and `aria-hidden`, so keep the real text somewhere accessible.
