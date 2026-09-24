@@ -129,20 +129,20 @@ export function MonthGrid({
   const rows = Array.from({ length: cells.length / 7 }, (_, r) => cells.slice(r * 7, r * 7 + 7));
 
   return (
-    <div className="w-[168px]">
+    <div className="w-[196px]">
       <p id={headingId} aria-live="polite" className="text-center text-caption font-bold text-text-secondary mb-1.5 tracking-wide">
         {MONTH_LONG[month]} {year}
       </p>
       <div role="grid" aria-labelledby={headingId}>
         <div role="row" className="grid grid-cols-7">
           {DOW.map((d) => (
-            <div key={d.short} role="columnheader" aria-label={d.long} className="h-6 flex items-center justify-center text-caption-sm text-text-secondary font-semibold">{d.short}</div>
+            <div key={d.short} role="columnheader" aria-label={d.long} className="h-7 flex items-center justify-center text-caption-sm text-text-secondary font-semibold">{d.short}</div>
           ))}
         </div>
         {rows.map((row, r) => (
           <div key={r} role="row" className="grid grid-cols-7">
             {row.map((cell, i) => {
-              if (!cell) return <div key={i} role="gridcell" className="h-6" />;
+              if (!cell) return <div key={i} role="gridcell" className="h-7" />;
               const { day, ds } = cell;
               const inRange = !!range && ds >= range.start && ds <= range.end;
               const isStart = !!range && range.start === ds;
@@ -154,8 +154,8 @@ export function MonthGrid({
                   key={i}
                   role="gridcell"
                   aria-selected={inRange}
-                  className={`relative flex items-center justify-center h-6
-                    ${isMid || isStart || isEnd ? 'bg-bay-leaf-200' : ''}
+                  className={`relative flex items-center justify-center h-7
+                    ${isMid || isStart || isEnd ? 'bg-bay-leaf-100' : ''}
                     ${isStart ? 'rounded-l-full' : ''}
                     ${isEnd ? 'rounded-r-full' : ''}
                   `}
@@ -169,9 +169,9 @@ export function MonthGrid({
                     onClick={() => onDayClick(ds)}
                     onKeyDown={(e) => onDayKeyDown(e, ds)}
                     className={`
-                      w-6 h-6 flex items-center justify-center rounded-full text-caption transition-colors cursor-pointer select-none
+                      w-7 h-7 flex items-center justify-center rounded-full text-caption transition-colors cursor-pointer select-none
                       focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-bay-leaf-600
-                      ${isStart || isEnd ? 'bg-bay-leaf-200 text-bay-leaf-900 font-bold ring-1 ring-inset ring-bay-leaf-600' : ''}
+                      ${isStart || isEnd ? 'bg-bay-leaf-300 dark:bg-bay-leaf-200 text-bay-leaf-900 font-bold hover:bg-bay-leaf-200 dark:hover:bg-bay-leaf-100' : ''}
                       ${!inRange && !isToday ? 'text-text-secondary hover:bg-bay-leaf-100' : ''}
                       ${isToday && !inRange ? 'ring-1 ring-bay-leaf-600 text-text-primary font-semibold' : ''}
                       ${isMid ? 'text-bay-leaf-900' : ''}
@@ -396,7 +396,7 @@ export function WeekCalendarPicker(props: WeekCalendarPickerProps) {
             aria-pressed={activePresetId === p.id}
             onClick={p.onPick}
             className={`w-full text-left px-3 py-2 text-xs transition-colors
-              ${activePresetId === p.id ? 'bg-bay-leaf-200 text-bay-leaf-900 font-semibold ring-1 ring-inset ring-bay-leaf-600' : 'text-text-secondary hover:bg-bay-leaf-100'}
+              ${activePresetId === p.id ? 'bg-bay-leaf-300 dark:bg-bay-leaf-200 text-bay-leaf-900 font-semibold hover:bg-bay-leaf-200 dark:hover:bg-bay-leaf-100' : 'text-text-secondary hover:bg-bay-leaf-100'}
             `}
           >
             {p.label}
