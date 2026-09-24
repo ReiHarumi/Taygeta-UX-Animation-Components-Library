@@ -1,0 +1,16 @@
+/* Polaris settings for the Taygeta Text Sweep shell used by <Input animated>.
+   Every value is a design_spec token. Taygeta's stagger (35ms), stagger cap (8),
+   distance (115%) and blur (4px) are left at their defaults: design_spec has no
+   values for them. */
+.pui-sweep {
+  /* Font lives on the shell, not the input (Taygeta README "Styling"), so the
+     overlay sits exactly on the caret. design_spec §3 Body; §10 --font-size-body. */
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-normal);
+  /* design_spec §7: enter 250ms, standard easing. */
+  --text-sweep-duration: var(--duration-base);
+  --text-sweep-easing: var(--ease-standard);
+  --text-sweep-exit-easing: var(--ease-standard);
+  /* Autofill is covered with the field's own fill (design_spec §2 surface-elevated). */
+  --text-sweep-autofill-bg: var(--color-surface-elevated);
+}

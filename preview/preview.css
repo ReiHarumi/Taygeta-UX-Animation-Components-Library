@@ -1,0 +1,36 @@
+@import "tailwindcss";
+@import "../src/styles/index.css";
+
+/* Scan the library source and this preview for utility classes. */
+@source "../src";
+@source ".";
+
+/* Self-hosted fonts, read from the gallery's public folder (not copied). Third-party; licences unconfirmed. */
+@font-face {
+  font-family: 'Althera';
+  src: url('../../free-app-gallery/public/fonts/Althera.otf') format('opentype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bergola';
+  src: url('../../free-app-gallery/public/fonts/Bergola.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Same base layer as the gallery (design_spec §3 fonts, §2 surface and text). */
+@layer base {
+  html {
+    font-family: var(--font-body);
+    background: var(--color-surface-default);
+    color: var(--color-text-primary);
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    line-height: var(--line-height-tight);
+  }
+}

@@ -1,0 +1,217 @@
+/* Polaris design tokens. Generated from References/design.md section 10 by polaris-ui/scripts/sync-tokens.mjs. Do not edit the generated blocks; change the spec and re-run the script. */
+
+/* Primitives, radius, shadow, fonts, type roles, breakpoints: @theme makes them Tailwind utilities and emits CSS variables. */
+@theme {
+  --color-bay-leaf-50: #f2f7f3;
+  --color-bay-leaf-100: #dfece2;
+  --color-bay-leaf-200: #c2d8c8;
+  --color-bay-leaf-300: #8eb69b;
+  --color-bay-leaf-400: #6c9b7d;
+  --color-bay-leaf-500: #4b7e5f;
+  --color-bay-leaf-600: #38634a;
+  --color-bay-leaf-700: #2d4f3c;
+  --color-bay-leaf-800: #254031;
+  --color-bay-leaf-900: #1f3529;
+  --color-bay-leaf-950: #111d17;
+  --color-woodsmoke-50: #fafafa;
+  --color-woodsmoke-100: #f5f5f5;
+  --color-woodsmoke-200: #e6e6e6;
+  --color-woodsmoke-300: #d3d3d3;
+  --color-woodsmoke-400: #a3a3a3;
+  --color-woodsmoke-500: #727272;
+  --color-woodsmoke-600: #535353;
+  --color-woodsmoke-700: #404040;
+  --color-woodsmoke-800: #272727;
+  --color-woodsmoke-900: #141414;
+  --color-woodsmoke-950: #0b0b0b;
+  --color-black-russian-50: #e4ecff;
+  --color-black-russian-100: #cfddff;
+  --color-black-russian-200: #a8bfff;
+  --color-black-russian-300: #7495ff;
+  --color-black-russian-400: #3e5cff;
+  --color-black-russian-500: #1327ff;
+  --color-black-russian-600: #0002ff;
+  --color-black-russian-700: #0300ff;
+  --color-black-russian-800: #0000e4;
+  --color-black-russian-900: #0005b0;
+  --color-black-russian-950: #00001f;
+  --color-neutral-50: #f8fafb;
+  --color-neutral-100: #f1f3f5;
+  --color-neutral-200: #e9ecef;
+  --color-neutral-300: #dee2e6;
+  --color-neutral-400: #ced4da;
+  --color-neutral-500: #adb5bd;
+  --color-neutral-600: #868e96;
+  --color-neutral-700: #495057;
+  --color-neutral-800: #343a40;
+  --color-neutral-900: #212529;
+  --color-neutral-950: #0e1117;
+  --color-success-200: #dcfce7;
+  --color-success-400: #86efac;
+  --color-success-600: #22c55e;
+  --color-success-800: #15803d;
+  --color-warning-200: #fef3c7;
+  --color-warning-400: #fcd34d;
+  --color-warning-600: #eab308;
+  --color-warning-800: #ca8a04;
+  --color-error-200: #fee2e2;
+  --color-error-400: #fca5a5;
+  --color-error-600: #ef4444;
+  --color-error-800: #b91c1c;
+  --color-info-200: #dbeafe;
+  --color-info-400: #60a5fa;
+  --color-info-600: #3b82f6;
+  --color-info-800: #1d4ed8;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.12);
+  --font-display: Althera;
+  --font-brand: Bergola;
+  --font-body: "Public Sans";
+  --font-counter: "Departure Mono", ui-monospace, monospace;
+  --text-title: clamp(1.25rem, 2.5vw, 1.5rem);
+  --text-section: 1.25rem;
+  --text-subsection: 1.125rem;
+  --text-caption: 0.6875rem;
+  --text-caption-sm: 0.625rem;
+  --text-micro: 0.5625rem;
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-wide: 1440px;
+}
+
+/* Semantic tokens, spacing, motion, type scale (raw variables, light default) */
+:root {
+  --color-surface-action: #38634a;
+  --color-surface-secondary: #535353;
+  --color-surface-tertiary: #0002ff;
+  --color-surface-default: #f8fafb;
+  --color-surface-elevated: #ffffff;
+  --color-surface-success: #dcfce7;
+  --color-surface-warning: #fef3c7;
+  --color-surface-error: #fee2e2;
+  --color-surface-info: #dbeafe;
+  --color-text-primary: #212529;
+  --color-text-secondary: #495057;
+  --color-text-tertiary: #868e96;
+  --color-text-inverted: #ffffff;
+  --color-border-default: #dee2e6;
+  --color-border-subtle: #e9ecef;
+  --color-border-strong: #ced4da;
+  --color-success-text: #15803d;
+  --color-warning-text: #ca8a04;
+  --color-error-text: #b91c1c;
+  --color-info-text: #1d4ed8;
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  --space-7: 56px;
+  --space-8: 64px;
+  --space-9: 72px;
+  --space-10: 80px;
+  --radius-0: 0px;
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 400ms;
+  --duration-skeleton: 1500ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-linear: linear;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-size-h1: clamp(2rem, 5vw, 3.5rem);
+  --font-size-h2: clamp(1.75rem, 4vw, 2.5rem);
+  --font-size-h3: clamp(1.5rem, 3vw, 1.875rem);
+  --font-size-h4: clamp(1.25rem, 2.5vw, 1.5rem);
+  --font-size-body-lg: clamp(1.125rem, 2vw, 1.25rem);
+  --font-size-body: clamp(1rem, 1.5vw, 1.125rem);
+  --font-size-body-sm: clamp(0.875rem, 1.2vw, 1rem);
+  --font-size-label: clamp(0.875rem, 1.2vw, 1rem);
+  --font-size-button: 1rem;
+  --font-size-mono: 0.875rem;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.6;
+  --breakpoint-mobile: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-surface-action: #6c9b7d;
+    --color-surface-secondary: #a3a3a3;
+    --color-surface-tertiary: #3e5cff;
+    --color-surface-default: #212529;
+    --color-surface-elevated: #343a40;
+    --color-surface-success: #15803d;
+    --color-surface-warning: #ca8a04;
+    --color-surface-error: #b91c1c;
+    --color-surface-info: #1d4ed8;
+    --color-text-primary: #f8fafb;
+    --color-text-secondary: #e9ecef;
+    --color-text-tertiary: #dee2e6;
+    --color-text-inverted: #212529;
+    --color-border-default: #495057;
+    --color-border-subtle: #343a40;
+    --color-border-strong: #868e96;
+    --color-success-text: #dcfce7;
+    --color-warning-text: #fef3c7;
+    --color-error-text: #fee2e2;
+    --color-info-text: #dbeafe;
+  }
+}
+
+/* ---- Hand-maintained below this line: sync-tokens.mjs keeps it as is. ---- */
+
+/* Semantic utilities. `inline` = each utility resolves the :root variable at use, so dark mode flips.
+   The :root semantic variables above are the only values; these entries only name utilities. */
+@theme inline {
+  /* Short aliases (free-app-gallery): bg-action, bg-page, text-fg, border-line ... */
+  --color-action: var(--color-surface-action);
+  --color-secondary: var(--color-surface-secondary);
+  --color-accent: var(--color-surface-tertiary);
+  --color-page: var(--color-surface-default);
+  --color-elevated: var(--color-surface-elevated);
+  --color-fg: var(--color-text-primary);
+  --color-fg-muted: var(--color-text-secondary);
+  --color-fg-subtle: var(--color-text-tertiary);
+  --color-fg-inverted: var(--color-text-inverted);
+  --color-line: var(--color-border-default);
+  --color-line-subtle: var(--color-border-subtle);
+  --color-line-strong: var(--color-border-strong);
+  --color-ok-bg: var(--color-surface-success);
+  --color-ok-fg: var(--color-success-text);
+  --color-info-bg: var(--color-surface-info);
+  --color-info-fg: var(--color-info-text);
+
+  /* Timer MVP names (design_spec §2), so ported components compile unchanged:
+     bg-surface-default, text-text-secondary, border-border-subtle, text-error-text ... */
+  --color-surface-action: var(--color-surface-action);
+  --color-surface-secondary: var(--color-surface-secondary);
+  --color-surface-tertiary: var(--color-surface-tertiary);
+  --color-surface-default: var(--color-surface-default);
+  --color-surface-elevated: var(--color-surface-elevated);
+  --color-surface-success: var(--color-surface-success);
+  --color-surface-warning: var(--color-surface-warning);
+  --color-surface-error: var(--color-surface-error);
+  --color-surface-info: var(--color-surface-info);
+  --color-text-primary: var(--color-text-primary);
+  --color-text-secondary: var(--color-text-secondary);
+  --color-text-tertiary: var(--color-text-tertiary);
+  --color-text-inverted: var(--color-text-inverted);
+  --color-border-default: var(--color-border-default);
+  --color-border-subtle: var(--color-border-subtle);
+  --color-border-strong: var(--color-border-strong);
+  --color-success-text: var(--color-success-text);
+  --color-warning-text: var(--color-warning-text);
+  --color-error-text: var(--color-error-text);
+  --color-info-text: var(--color-info-text);
+}

@@ -1,0 +1,5 @@
+/* @polaris/ui stylesheet. Consumers import this once, after `@import "tailwindcss";`,
+   and add `@source "<path-to>/polaris-ui/src";` so Tailwind scans the components. */
+@import "./tokens.css";
+@import "taygeta-ux-animation-components/text-sweep.css";
+@import "./input.css";
