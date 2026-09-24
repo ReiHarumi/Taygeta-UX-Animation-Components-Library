@@ -4,6 +4,12 @@
   "private": true,
   "type": "module",
   "description": "Polaris shared form-control library. Source-only TSX, built to References/design.md section 9.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ReiHarumi/Taygeta-UX-Animation-Components-Library.git",
+    "branch": "polaris-ui"
+  },
   "exports": {
     ".": "./src/index.ts",
     "./styles.css": "./src/styles/index.css"
