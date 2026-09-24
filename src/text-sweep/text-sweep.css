@@ -9,8 +9,10 @@
  *   --text-sweep-stagger-cap      characters that stagger        (default: 8)
  *   --text-sweep-distance         how far characters travel      (default: 115%)
  *   --text-sweep-blur             blur at the start of an enter  (default: 4px)
- *   --text-sweep-inset-left       overlay left inset             (default: 2px)
- *   --text-sweep-inset-right      overlay right inset            (default: 20px)
+ *   --text-sweep-easing           enter timing function          (default: cubic-bezier(0.22, 1, 0.36, 1))
+ *   --text-sweep-exit-easing      exit timing function           (default: cubic-bezier(0.4, 0, 1, 1))
+ *   --text-sweep-inset-left       overlay left inset             (default: 2px; SweepInput measures it)
+ *   --text-sweep-inset-right      overlay right inset            (default: 20px; SweepInput measures it)
  *   --text-sweep-autofill-bg      color that hides browser autofill paint (default: Canvas)
  *
  * The exit length comes from the `exitDuration` prop (default 220ms).
@@ -32,15 +34,16 @@
   box-sizing: border-box;
 }
 
-/* Only hide the text while there is a value, so a real placeholder still shows. */
-.text-sweep-shell > input:not(:placeholder-shown) {
+/* Only hide the text while there is a value, so a real placeholder still shows.
+   Shells marked data-text-sweep="off" (passwords) keep the input's own text. */
+.text-sweep-shell:not([data-text-sweep="off"]) > input:not(:placeholder-shown) {
   color: transparent;
   -webkit-text-fill-color: transparent !important;
   caret-color: var(--text-sweep-caret-color, currentColor);
 }
 
 /* Browser autofill paints its own background and text; cover it. */
-.text-sweep-shell > input[data-autofilled="true"] {
+.text-sweep-shell:not([data-text-sweep="off"]) > input[data-autofilled="true"] {
   background-color: transparent !important;
   transition: none;
   -webkit-box-shadow: 0 0 0 1000px var(--text-sweep-autofill-bg, Canvas) inset !important;
@@ -75,10 +78,16 @@
   white-space: pre;
 }
 
+/* Shifted by the input's scrollLeft so long values follow the caret. */
+.text-sweep__track {
+  display: inline-flex;
+  flex: none;
+}
+
 .text-sweep__char {
   display: inline-block;
   min-width: 0.01em;
-  animation: text-sweep-up var(--text-sweep-duration, 360ms) cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: text-sweep-up var(--text-sweep-duration, 360ms) var(--text-sweep-easing, cubic-bezier(0.22, 1, 0.36, 1)) both;
   /* Cap the per-character stagger so long values (a 40+ character email)
      settle quickly instead of growing without bound. */
   animation-delay: calc(min(var(--text-sweep-char-index), var(--text-sweep-stagger-cap, 8)) * var(--text-sweep-stagger, 35ms));
@@ -90,7 +99,7 @@
 }
 
 .text-sweep__char--exiting {
-  animation: text-sweep-exit var(--text-sweep-exit-duration, 220ms) cubic-bezier(0.4, 0, 1, 1) both;
+  animation: text-sweep-exit var(--text-sweep-exit-duration, 220ms) var(--text-sweep-exit-easing, cubic-bezier(0.4, 0, 1, 1)) both;
   animation-delay: 0ms;
 }
 
@@ -111,13 +120,18 @@
   to { opacity: 0; transform: translateY(var(--text-sweep-distance, 115%)); filter: blur(var(--text-sweep-blur, 4px)); }
 }
 
-/* Reduced motion: drop the overlay and show the input's own text. */
+/* Reduced motion: drop the overlay and show the input's own text, unless the
+   shell opts out with data-reduced-motion="ignore". */
 @media (prefers-reduced-motion: reduce) {
   .text-sweep {
     display: none;
   }
 
-  .text-sweep-shell > input:not(:placeholder-shown) {
+  .text-sweep-shell[data-reduced-motion="ignore"] > .text-sweep {
+    display: inline-flex;
+  }
+
+  .text-sweep-shell:not([data-reduced-motion="ignore"]) > input:not(:placeholder-shown) {
     color: inherit;
     -webkit-text-fill-color: currentColor !important;
   }

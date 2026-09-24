@@ -16,7 +16,9 @@ While someone types, each new character slides in with a small blur and stagger.
 - **Diff-based.** Only what changed animates. A character typed in the middle sweeps in without disturbing the rest.
 - **Grapheme-aware.** Accents (`José`), flags and emoji sequences (`👩🏽‍💻`) animate as one unit instead of being torn apart.
 - **Autofill-safe.** Browser autofill paints its own background and text, so the component detects it and covers it.
-- **Accessible.** With `prefers-reduced-motion: reduce` the overlay is dropped and the plain input text shows.
+- **Follows the caret.** Long values scroll with the input, and the overlay's insets are measured from the input's padding.
+- **Password-safe.** `type="password"` never gets an overlay, so masked characters are never revealed.
+- **Accessible.** With `prefers-reduced-motion: reduce` the overlay is dropped and the plain input text shows (opt out with `reducedMotion="ignore"`).
 - **Tunable with CSS variables**, no JavaScript options needed.
 
 ### Try the demo
@@ -33,11 +35,13 @@ Then open `/demo/index.html` on the port `serve` prints. (`serve.json` turns off
 
 ### Use it in your project
 
-This repository is not published to npm yet. Until then, copy `src/text-sweep/` into your project (three files), or build the package and install it from a local path:
+This repository is not published to the npm registry. Install it straight from GitHub, pinned to a tag or commit:
 
 ```bash
-npm run build      # writes dist/ (ES module, type declarations, CSS)
+npm i github:ReiHarumi/Taygeta-UX-Animation-Components-Library#v0.2.0
 ```
+
+npm runs the package's `prepare` script (`npm run build`) after a Git install, which writes `dist/` (ES module, type declarations, CSS). Import from `taygeta-ux-animation-components` and `taygeta-ux-animation-components/text-sweep.css`. You can also copy `src/text-sweep/` into your project (three files).
 
 ```tsx
 import { useState } from "react";
@@ -65,8 +69,14 @@ function NameField() {
 | `value` | required | The controlled value. |
 | `shellClassName` | none | Extra class for the wrapping element. |
 | `exitDuration` | `220` | Exit animation length in milliseconds. |
+| `autoInset` | `true` | Measure the input's content box and set `--text-sweep-inset-left/right` on the wrapper. Set `false` to control the insets with CSS. |
+| `reducedMotion` | `"respect"` | `"respect"` drops the overlay under `prefers-reduced-motion: reduce`. `"ignore"` keeps animating. |
 
-If you want the overlay without the input wrapper, use `TextSweep` directly: `<TextSweep value="Hello" direction="up" />`. It is decorative and `aria-hidden`, so keep the real text somewhere accessible.
+`ref` reaches the underlying `<input>`, so you can focus or measure it.
+
+With `type="password"` the overlay is never rendered and the input's own (masked) text shows; the wrapper gets `data-text-sweep="off"`.
+
+If you want the overlay without the input wrapper, use `TextSweep` directly: `<TextSweep value="Hello" direction="up" />`. Pass `scrollLeft` (px) to shift the characters left inside the clipped overlay. It is decorative and `aria-hidden`, so keep the real text somewhere accessible.
 
 ### Styling
 
@@ -87,8 +97,10 @@ Tune the animation with CSS variables on the wrapper or any ancestor:
 | `--text-sweep-stagger-cap` | `8` | How many characters stagger; the rest enter together. |
 | `--text-sweep-distance` | `115%` | How far characters travel. |
 | `--text-sweep-blur` | `4px` | Blur at the start of an enter. |
-| `--text-sweep-inset-left` | `2px` | Overlay left inset (match your input padding). |
-| `--text-sweep-inset-right` | `20px` | Overlay right inset; text is clipped here. |
+| `--text-sweep-easing` | `cubic-bezier(0.22, 1, 0.36, 1)` | Enter timing function. |
+| `--text-sweep-exit-easing` | `cubic-bezier(0.4, 0, 1, 1)` | Exit timing function. |
+| `--text-sweep-inset-left` | `2px` | Overlay left inset. `SweepInput` measures it unless `autoInset={false}`. |
+| `--text-sweep-inset-right` | `20px` | Overlay right inset; text is clipped here. Measured like the left inset. |
 | `--text-sweep-autofill-bg` | `Canvas` | Color that hides the browser's autofill background. Set it to your page background. |
 
 Use `input:placeholder-shown` styling for placeholders as usual: the input's text is only hidden while it holds a value.
@@ -96,7 +108,6 @@ Use `input:placeholder-shown` styling for placeholders as usual: the input's tex
 ### Known limits
 
 - Single-line text inputs only (no `<textarea>`, no `<select>`).
-- The overlay is clipped to the input box, so very long values are cut at the inset instead of scrolling with the caret.
 - Right-to-left text and vertical writing modes have not been tested.
 - The autofill detection relies on `:-webkit-autofill`, so it applies to Chromium and Safari. Firefox autofill styling is not covered.
 
@@ -116,7 +127,7 @@ src/
   index.ts                 public exports
   text-sweep/
     TextSweep.tsx          the overlay and the diffing logic
-    SweepInput.tsx         input wrapper: direction and autofill handling
+    SweepInput.tsx         input wrapper: direction, autofill, scroll and inset handling
     text-sweep.css         styles and animation variables
 demo/                      a page that shows the component
 ```
