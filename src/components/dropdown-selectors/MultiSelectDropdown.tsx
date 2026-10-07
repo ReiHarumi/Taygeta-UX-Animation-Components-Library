@@ -488,7 +488,7 @@ function ChipsTrigger({
             </span>
           ))}
           {hidden > 0 && (
-            <span data-plus-visible="" className="inline-flex h-6 shrink-0 items-center rounded-md bg-neutral-100 px-1.5 font-semibold text-text-secondary tabular-nums">
+            <span data-plus-visible="" className="inline-flex h-6 shrink-0 items-center rounded-md border border-border-default bg-surface-elevated px-1.5 font-semibold text-text-secondary tabular-nums">
               +{hidden}
               <span className="sr-only"> more selected</span>
             </span>
