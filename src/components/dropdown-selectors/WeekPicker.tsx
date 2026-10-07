@@ -428,7 +428,7 @@ export function WeekCalendarPicker(props: WeekCalendarPickerProps) {
         </div>
 
         <div className="flex items-start gap-1">
-          <button type="button" aria-label="Previous month" onClick={prevMonth} className="p-1 mt-[22px] text-text-secondary hover:text-text-secondary hover:bg-neutral-100 rounded-lg transition-colors shrink-0">
+          <button type="button" aria-label="Previous month" onClick={prevMonth} className="p-1 mt-[22px] text-text-secondary hover:text-text-secondary hover:bg-surface-default rounded-lg transition-colors shrink-0">
             <ChevronLeft className="w-4 h-4" aria-hidden="true" />
           </button>
           <div className="flex flex-col sm:flex-row gap-2">
@@ -437,7 +437,7 @@ export function WeekCalendarPicker(props: WeekCalendarPickerProps) {
               <MonthGrid year={y2} month={m2} range={shown} focusDate={tabbable} onDayClick={handleDayClick} onDayKeyDown={handleDayKeyDown} />
             )}
           </div>
-          <button type="button" aria-label="Next month" onClick={nextMonth} className="p-1 mt-[22px] text-text-secondary hover:text-text-secondary hover:bg-neutral-100 rounded-lg transition-colors shrink-0">
+          <button type="button" aria-label="Next month" onClick={nextMonth} className="p-1 mt-[22px] text-text-secondary hover:text-text-secondary hover:bg-surface-default rounded-lg transition-colors shrink-0">
             <ChevronRight className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
