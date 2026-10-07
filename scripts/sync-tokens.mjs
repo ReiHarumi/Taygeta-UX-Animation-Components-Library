@@ -62,8 +62,8 @@ const lines = (list, indent) => list.map(([n, v]) => `${indent}${n}: ${v};`).joi
 
 const generated = `/* Polaris design tokens. Generated from References/design.md section 10 by polaris-ui/scripts/sync-tokens.mjs. Do not edit the generated blocks; change the spec and re-run the script. */
 
-/* Primitives, radius, shadow, fonts, type roles, breakpoints: @theme makes them Tailwind utilities and emits CSS variables. */
-@theme {
+/* Primitives, radius, shadow, fonts, type roles, breakpoints: @theme static makes them Tailwind utilities and always emits every CSS variable (plain @theme drops variables no utility references, which broke inline var() consumers). */
+@theme static {
 ${lines(themeDecls, '  ')}
 }
 
