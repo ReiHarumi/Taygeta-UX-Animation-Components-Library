@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 
 /**
  * Closes an open dropdown/popover on an outside pointerdown or on Escape.
@@ -13,6 +13,16 @@ import { useEffect } from 'react';
  *
  * No-ops while `open` is false, so it's safe to call unconditionally on every
  * render of a component that owns a popover's open state.
+ *
+ * `onClose` may be a fresh closure on every render: the listeners read the
+ * latest one through a ref, so a close handler that reads changing state
+ * (drafts, the active option) never acts on a stale value. The listeners
+ * themselves are only re-registered when `open` changes.
+ *
+ * @param containerRef Element(s) counted as "inside"; a pointerdown in none of them closes.
+ * @param open Whether the popover is open. Listeners exist only while true.
+ * @param onClose Called on outside pointerdown or Escape. Latest render's handler is used.
+ * @param triggerRef Optional; receives focus after an Escape close. `undefined` = focus is left where it is.
  */
 export function useDismiss(
   containerRef: React.RefObject<HTMLElement | null> | Array<React.RefObject<HTMLElement | null>>,
@@ -20,6 +30,11 @@ export function useDismiss(
   onClose: () => void,
   triggerRef?: React.RefObject<HTMLElement | null>
 ) {
+  const onCloseRef = useRef(onClose);
+  useLayoutEffect(() => {
+    onCloseRef.current = onClose;
+  });
+
   useEffect(() => {
     if (!open) return;
 
@@ -27,12 +42,12 @@ export function useDismiss(
 
     const handlePointerDown = (e: PointerEvent) => {
       const target = e.target as Node;
-      if (!refs.some((r) => r.current?.contains(target))) onClose();
+      if (!refs.some((r) => r.current?.contains(target))) onCloseRef.current();
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        onCloseRef.current();
         triggerRef?.current?.focus();
       }
     };
