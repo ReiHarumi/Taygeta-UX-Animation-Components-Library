@@ -124,6 +124,7 @@
   --color-border-default: #dee2e6;
   --color-border-subtle: #e9ecef;
   --color-border-strong: #ced4da;
+  --color-focus-ring: #38634a;
   --color-success-text: #15803d;
   --color-warning-text: #ca8a04;
   --color-error-text: #b91c1c;
@@ -169,7 +170,7 @@
   :root {
     --color-surface-action: #6c9b7d;
     --color-surface-secondary: #a3a3a3;
-    --color-surface-tertiary: #3e5cff;
+    --color-surface-tertiary: #7495ff;
     --color-surface-default: #212529;
     --color-surface-elevated: #343a40;
     --color-surface-success: #15803d;
@@ -183,6 +184,7 @@
     --color-border-default: #495057;
     --color-border-subtle: #343a40;
     --color-border-strong: #868e96;
+    --color-focus-ring: #6c9b7d;
     --color-success-text: #dcfce7;
     --color-warning-text: #fef3c7;
     --color-error-text: #fee2e2;
