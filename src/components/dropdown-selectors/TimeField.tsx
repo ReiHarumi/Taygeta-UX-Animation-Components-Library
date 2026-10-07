@@ -177,7 +177,7 @@ export default function TimeField({ label, id, value, onChange, onBlur, invalid,
         className={`px-2 text-xs font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-bay-leaf-600 ${
           on
             ? 'bg-bay-leaf-200 text-bay-leaf-900 ring-1 ring-inset ring-bay-leaf-600'
-            : 'bg-surface-elevated text-text-secondary hover:bg-bay-leaf-100'
+            : 'bg-surface-elevated text-text-secondary hover:bg-bay-leaf-100 hover:text-bay-leaf-900'
         }`}
       >
         {m}

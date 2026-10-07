@@ -336,7 +336,7 @@ export default function SingleSelectDropdown({
           onKeyDown={onListKeyDown}
           className={`absolute ${
             anchor === 'left' ? `left-0 ${popupWidth}` : anchor === 'right' ? `right-0 ${popupWidth}` : 'left-0 right-0'
-          } top-full z-30 mt-1 bg-surface-elevated rounded-xl border border-border-subtle shadow-lg p-1 ${text}`}
+          } top-full z-30 mt-1 bg-surface-elevated rounded-xl border border-border-default shadow-lg p-1 ${text}`}
         >
           {searchable && (
             <div className="relative mb-1">
@@ -393,14 +393,14 @@ export default function SingleSelectDropdown({
                     opt.disabled
                       ? 'cursor-not-allowed text-text-secondary opacity-60'
                       : isChosen
-                        ? `cursor-pointer font-medium text-text-primary ${isActive ? 'bg-bay-leaf-100' : 'bg-bay-leaf-50'}`
+                        ? `cursor-pointer font-medium text-bay-leaf-900 ${isActive ? 'bg-bay-leaf-100' : 'bg-bay-leaf-50'}`
                         : `cursor-pointer text-text-primary ${isActive ? 'bg-surface-default' : ''}`
                   } ${isActive ? 'outline outline-1 -outline-offset-1 outline-border-default' : ''}`}
                 >
                   <span className="min-w-0 flex-1">
                     <span className="block truncate">{opt.label}</span>
                     {opt.description && (
-                      <span className="block truncate font-normal text-text-secondary">{opt.description}</span>
+                      <span className={`block truncate font-normal ${isChosen ? 'text-bay-leaf-700' : 'text-text-secondary'}`}>{opt.description}</span>
                     )}
                   </span>
                   {isChosen && <Check aria-hidden="true" className="w-3.5 h-3.5 shrink-0 text-bay-leaf-600" />}

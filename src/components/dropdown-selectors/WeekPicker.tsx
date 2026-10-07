@@ -172,7 +172,7 @@ export function MonthGrid({
                       w-7 h-7 flex items-center justify-center rounded-full text-caption transition-colors cursor-pointer select-none
                       focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-bay-leaf-600
                       ${isStart || isEnd ? 'bg-bay-leaf-300 dark:bg-bay-leaf-200 text-bay-leaf-900 font-bold hover:bg-bay-leaf-200 dark:hover:bg-bay-leaf-100' : ''}
-                      ${!inRange && !isToday ? 'text-text-secondary hover:bg-bay-leaf-100' : ''}
+                      ${!inRange && !isToday ? 'text-text-secondary hover:bg-bay-leaf-100 hover:text-bay-leaf-900' : ''}
                       ${isToday && !inRange ? 'ring-1 ring-bay-leaf-600 text-text-primary font-semibold' : ''}
                       ${isMid ? 'text-bay-leaf-900' : ''}
                     `}
@@ -385,7 +385,7 @@ export function WeekCalendarPicker(props: WeekCalendarPickerProps) {
       ref={rootRef}
       role="dialog"
       aria-label={dialogLabel}
-      className={`fixed inset-x-4 top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto lg:absolute lg:inset-x-auto lg:max-h-none lg:top-full lg:mt-1 ${alignCls} lg:overflow-hidden z-30 bg-surface-elevated rounded-xl border border-border-subtle shadow-lg flex flex-col lg:flex-row`}
+      className={`fixed inset-x-4 top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto lg:absolute lg:inset-x-auto lg:max-h-none lg:top-full lg:mt-1 ${alignCls} lg:overflow-hidden z-30 bg-surface-elevated rounded-xl border border-border-default shadow-lg flex flex-col lg:flex-row`}
     >
       {presetRail.length > 0 && (
       <div role="group" aria-label="Presets" className="w-full lg:w-36 border-b lg:border-b-0 lg:border-r border-neutral-100 py-1.5 shrink-0">
@@ -396,7 +396,7 @@ export function WeekCalendarPicker(props: WeekCalendarPickerProps) {
             aria-pressed={activePresetId === p.id}
             onClick={p.onPick}
             className={`w-full text-left px-3 py-2 text-xs transition-colors
-              ${activePresetId === p.id ? 'bg-bay-leaf-300 dark:bg-bay-leaf-200 text-bay-leaf-900 font-semibold hover:bg-bay-leaf-200 dark:hover:bg-bay-leaf-100' : 'text-text-secondary hover:bg-bay-leaf-100'}
+              ${activePresetId === p.id ? 'bg-bay-leaf-300 dark:bg-bay-leaf-200 text-bay-leaf-900 font-semibold hover:bg-bay-leaf-200 dark:hover:bg-bay-leaf-100' : 'text-text-secondary hover:bg-bay-leaf-100 hover:text-bay-leaf-900'}
             `}
           >
             {p.label}

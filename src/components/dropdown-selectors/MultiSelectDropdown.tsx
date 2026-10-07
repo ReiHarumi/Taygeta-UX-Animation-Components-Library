@@ -303,7 +303,7 @@ export default function MultiSelectDropdown({
           onKeyDown={onPanelKeyDown}
           className={`absolute ${
             anchor === 'left' ? `left-0 ${popupWidth}` : anchor === 'right' ? `right-0 ${popupWidth}` : 'left-0 right-0'
-          } top-full z-30 mt-1 bg-surface-elevated rounded-xl border border-border-subtle shadow-lg p-1 ${text}`}
+          } top-full z-30 mt-1 bg-surface-elevated rounded-xl border border-border-default shadow-lg p-1 ${text}`}
         >
           {header}
 
@@ -362,8 +362,8 @@ export default function MultiSelectDropdown({
               return (
                 <li key={opt.value}>
                   <label
-                    className={`flex h-8 cursor-pointer items-center gap-2 rounded-lg px-2 text-text-primary transition-colors duration-150 motion-reduce:transition-none ${
-                      checked ? 'bg-bay-leaf-50 font-medium hover:bg-bay-leaf-100' : 'hover:bg-surface-default'
+                    className={`flex h-8 cursor-pointer items-center gap-2 rounded-lg px-2 transition-colors duration-150 motion-reduce:transition-none ${
+                      checked ? 'bg-bay-leaf-50 font-medium text-bay-leaf-900 hover:bg-bay-leaf-100' : 'text-text-primary hover:bg-surface-default'
                     }`}
                   >
                     {/* MS5: the shared drawn checkbox, bare inside this row's own label. */}
