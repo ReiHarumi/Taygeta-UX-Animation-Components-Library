@@ -152,7 +152,7 @@ export function Input({
           TONE_BORDER[tone],
           disabled
             ? 'cursor-not-allowed bg-surface-default'
-            : `bg-surface-elevated ${tone === 'default' ? 'hover:border-border-default' : ''}`,
+            : `bg-surface-elevated ${tone === 'default' ? 'hover:border-border-field' : ''}`,
           // Focus-visible: §2 border-strong ("Strong / focus borders") plus the ported selectors' 2px bay-leaf-600 ring.
           'has-[input:focus-visible]:ring-2 has-[input:focus-visible]:ring-bay-leaf-600',
           tone === 'default' ? 'has-[input:focus-visible]:border-border-strong' : '',

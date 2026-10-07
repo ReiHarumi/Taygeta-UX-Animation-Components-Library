@@ -235,13 +235,13 @@ export default function TimeField({ label, id, value, onChange, onBlur, invalid,
           aria-invalid={invalid || undefined}
           aria-describedby={describedBy}
           className={`flex-1 min-w-0 border rounded-lg px-2.5 py-1.5 text-xs bg-surface-elevated text-text-primary tabular-nums placeholder-text-tertiary focus:outline-none focus-visible:ring-2 focus-visible:ring-bay-leaf-600 ${
-            invalid ? 'border-error-400' : 'border-border-default'
+            invalid ? 'border-error-400' : 'border-border-field'
           }`}
         />
         <div
           role="radiogroup"
           aria-label={`${label}: AM or PM`}
-          className="flex shrink-0 rounded-lg border border-border-default overflow-hidden divide-x divide-border-subtle"
+          className="flex shrink-0 rounded-lg border border-border-field overflow-hidden divide-x divide-border-subtle"
         >
           {segment('AM')}
           {segment('PM')}

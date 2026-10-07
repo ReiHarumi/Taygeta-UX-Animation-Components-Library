@@ -311,8 +311,8 @@ export default function SingleSelectDropdown({
         onClick={() => (open ? close(true) : setOpen(true))}
         onKeyDown={onTriggerKeyDown}
         className={`flex ${width === 'auto' ? 'max-w-full' : 'w-full'} items-center justify-between gap-2 ${size === 'md' ? 'h-10' : 'h-8'} px-3 rounded-lg border ${
-          invalid ? 'border-error-400' : 'border-border-default'
-        } bg-surface-elevated ${text} font-semibold text-left hover:border-border-default transition-colors motion-reduce:transition-none disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:border-border-default ${focusRing} ${
+          invalid ? 'border-error-400' : 'border-border-field'
+        } bg-surface-elevated ${text} font-semibold text-left hover:border-border-field transition-colors motion-reduce:transition-none disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:border-border-field ${focusRing} ${
           chosenOption ? 'text-text-primary' : 'text-text-secondary'
         }`}
       >
@@ -355,7 +355,7 @@ export default function SingleSelectDropdown({
                 aria-autocomplete="list"
                 aria-activedescendant={activeId}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full min-w-0 h-8 pl-8 pr-2.5 rounded-lg border border-border-default bg-surface-elevated text-text-primary placeholder-text-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-bay-leaf-600"
+                className="w-full min-w-0 h-8 pl-8 pr-2.5 rounded-lg border border-border-field bg-surface-elevated text-text-primary placeholder-text-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-bay-leaf-600"
               />
               <span role="status" className="sr-only">
                 {q ? (shown.length === 0 ? 'No matches' : `${shown.length} shown`) : ''}

@@ -29,7 +29,7 @@ const MESSAGE_CLASS = 'text-(length:--font-size-body-sm) leading-(--line-height-
  * `error` = error-600, `success` = success-600). Hover darkens only the default tone.
  */
 export const TONE_BORDER: Record<FieldTone, string> = {
-  default: 'border-border-default',
+  default: 'border-border-field',
   error: 'border-error-600',
   success: 'border-success-600',
 };

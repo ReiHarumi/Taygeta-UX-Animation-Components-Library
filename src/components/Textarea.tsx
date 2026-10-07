@@ -120,7 +120,7 @@ export function Textarea({
           autoResize ? 'resize-none max-h-80 overflow-y-auto' : 'resize-y',
           disabled
             ? 'cursor-not-allowed bg-surface-default text-text-tertiary'
-            : `bg-surface-elevated text-text-primary ${tone === 'default' ? 'hover:border-border-default' : ''}`,
+            : `bg-surface-elevated text-text-primary ${tone === 'default' ? 'hover:border-border-field' : ''}`,
         ].join(' ')}
       />
       <FieldMessages hintId={hintId} errorId={errorId} hint={hint} error={tone === 'error' ? error : undefined} />

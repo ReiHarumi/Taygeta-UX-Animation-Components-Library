@@ -58,7 +58,7 @@ export function Radio({ value, checked, onChange, label, description, className 
           disabled ? 'opacity-60' : '',
           checked
             ? 'border-bay-leaf-600 bg-bay-leaf-200'
-            : 'border-neutral-600 bg-surface-elevated group-hover/radio:border-bay-leaf-600',
+            : 'border-border-field bg-surface-elevated group-hover/radio:border-bay-leaf-600',
         ].join(' ')}
       >
         {checked && <span className="h-2 w-2 rounded-md bg-bay-leaf-900" />}

@@ -85,7 +85,7 @@ export default function Checkbox({
         className={`flex ${box} items-center justify-center rounded-md border transition-colors duration-150 motion-reduce:transition-none peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-1 peer-focus-visible:outline-bay-leaf-600 peer-disabled:opacity-60 ${
           filled
             ? 'border-bay-leaf-600 bg-bay-leaf-200 text-bay-leaf-900'
-            : `border-neutral-600 bg-surface-elevated ${disabled ? '' : 'group-hover/cb:border-bay-leaf-600 hover:border-bay-leaf-600'}`
+            : `border-border-field bg-surface-elevated ${disabled ? '' : 'group-hover/cb:border-bay-leaf-600 hover:border-bay-leaf-600'}`
         }`}
       >
         {indeterminate ? (

@@ -35,6 +35,7 @@
   --color-black-russian-800: #0000e4;
   --color-black-russian-900: #0005b0;
   --color-black-russian-950: #00001f;
+  --color-neutral-0: #ffffff;
   --color-neutral-50: #f8fafb;
   --color-neutral-100: #f1f3f5;
   --color-neutral-200: #e9ecef;
@@ -113,6 +114,7 @@
   --color-surface-tertiary: #0002ff;
   --color-surface-default: #f8fafb;
   --color-surface-elevated: #ffffff;
+  --color-surface-muted: #f1f3f5;
   --color-surface-success: #dcfce7;
   --color-surface-warning: #fef3c7;
   --color-surface-error: #fee2e2;
@@ -124,6 +126,7 @@
   --color-border-default: #dee2e6;
   --color-border-subtle: #e9ecef;
   --color-border-strong: #ced4da;
+  --color-border-field: #868e96;
   --color-focus-ring: #38634a;
   --color-success-text: #15803d;
   --color-warning-text: #ca8a04;
@@ -173,6 +176,7 @@
     --color-surface-tertiary: #7495ff;
     --color-surface-default: #212529;
     --color-surface-elevated: #343a40;
+    --color-surface-muted: #495057;
     --color-surface-success: #15803d;
     --color-surface-warning: #ca8a04;
     --color-surface-error: #b91c1c;
@@ -184,6 +188,7 @@
     --color-border-default: #495057;
     --color-border-subtle: #343a40;
     --color-border-strong: #868e96;
+    --color-border-field: #868e96;
     --color-focus-ring: #6c9b7d;
     --color-success-text: #dcfce7;
     --color-warning-text: #fef3c7;
@@ -222,6 +227,7 @@
   --color-surface-tertiary: var(--color-surface-tertiary);
   --color-surface-default: var(--color-surface-default);
   --color-surface-elevated: var(--color-surface-elevated);
+  --color-surface-muted: var(--color-surface-muted);
   --color-surface-success: var(--color-surface-success);
   --color-surface-warning: var(--color-surface-warning);
   --color-surface-error: var(--color-surface-error);
@@ -233,6 +239,7 @@
   --color-border-default: var(--color-border-default);
   --color-border-subtle: var(--color-border-subtle);
   --color-border-strong: var(--color-border-strong);
+  --color-border-field: var(--color-border-field);
   --color-success-text: var(--color-success-text);
   --color-warning-text: var(--color-warning-text);
   --color-error-text: var(--color-error-text);

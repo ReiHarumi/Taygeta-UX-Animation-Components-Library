@@ -99,8 +99,8 @@ export default function DateField(props: DateFieldProps) {
         aria-labelledby={`${labelId} ${valueId}`}
         aria-describedby={describedBy}
         onClick={() => setOpen((o) => !o)}
-        className={`mt-1 w-full min-w-0 flex items-center gap-1.5 border rounded-lg px-2.5 py-1.5 text-xs bg-surface-elevated text-left hover:border-border-default transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-bay-leaf-600 ${
-          invalid ? 'border-error-400' : 'border-border-default'
+        className={`mt-1 w-full min-w-0 flex items-center gap-1.5 border rounded-lg px-2.5 py-1.5 text-xs bg-surface-elevated text-left hover:border-border-field transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-bay-leaf-600 ${
+          invalid ? 'border-error-400' : 'border-border-field'
         }`}
       >
         <Calendar className="w-3.5 h-3.5 text-text-secondary shrink-0" aria-hidden="true" />

@@ -285,7 +285,7 @@ export default function MultiSelectDropdown({
           aria-controls={open ? panelId : undefined}
           aria-label={triggerName}
           onClick={() => (open ? close(true) : setOpen(true))}
-          className={`flex w-full items-center justify-between gap-2 ${size === 'md' ? 'h-10' : 'h-8'} px-3 rounded-lg border border-border-default bg-surface-elevated ${text} font-semibold text-left hover:border-border-default transition-colors motion-reduce:transition-none ${focusRing} ${
+          className={`flex w-full items-center justify-between gap-2 ${size === 'md' ? 'h-10' : 'h-8'} px-3 rounded-lg border border-border-field bg-surface-elevated ${text} font-semibold text-left hover:border-border-field transition-colors motion-reduce:transition-none ${focusRing} ${
             selected.length ? 'text-text-primary' : 'text-text-secondary'
           }`}
         >
@@ -320,7 +320,7 @@ export default function MultiSelectDropdown({
                 aria-label={`Search ${label}`}
                 aria-controls={listId}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full min-w-0 h-8 pl-8 pr-2.5 rounded-lg border border-border-default bg-surface-elevated text-text-primary placeholder-text-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-bay-leaf-600"
+                className="w-full min-w-0 h-8 pl-8 pr-2.5 rounded-lg border border-border-field bg-surface-elevated text-text-primary placeholder-text-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-bay-leaf-600"
               />
               <span role="status" className="sr-only">
                 {filtered ? (shown.length === 0 ? 'No matches' : `${shown.length} shown`) : ''}
@@ -469,7 +469,7 @@ function ChipsTrigger({
         if ((e.target as HTMLElement).closest('[data-chip-remove], button')) return;
         onToggleOpen();
       }}
-      className={`flex w-full cursor-pointer items-center gap-1 ${size === 'md' ? 'h-10' : 'h-8'} pl-1 pr-3 rounded-lg border border-border-default bg-surface-elevated ${text} hover:border-border-default transition-colors motion-reduce:transition-none has-[[data-ms-trigger]:focus-visible]:outline has-[[data-ms-trigger]:focus-visible]:outline-2 has-[[data-ms-trigger]:focus-visible]:outline-offset-1 has-[[data-ms-trigger]:focus-visible]:outline-bay-leaf-600`}
+      className={`flex w-full cursor-pointer items-center gap-1 ${size === 'md' ? 'h-10' : 'h-8'} pl-1 pr-3 rounded-lg border border-border-field bg-surface-elevated ${text} hover:border-border-field transition-colors motion-reduce:transition-none has-[[data-ms-trigger]:focus-visible]:outline has-[[data-ms-trigger]:focus-visible]:outline-2 has-[[data-ms-trigger]:focus-visible]:outline-offset-1 has-[[data-ms-trigger]:focus-visible]:outline-bay-leaf-600`}
     >
       {labels.length > 0 && (
         <div ref={boxRef} className="relative flex min-w-0 flex-1 items-center gap-1 overflow-hidden">
@@ -488,7 +488,7 @@ function ChipsTrigger({
             </span>
           ))}
           {hidden > 0 && (
-            <span data-plus-visible="" className="inline-flex h-6 shrink-0 items-center rounded-md border border-border-default bg-surface-elevated px-1.5 font-semibold text-text-secondary tabular-nums">
+            <span data-plus-visible="" className="inline-flex h-6 shrink-0 items-center rounded-md border border-border-field bg-surface-elevated px-1.5 font-semibold text-text-secondary tabular-nums">
               +{hidden}
               <span className="sr-only"> more selected</span>
             </span>
