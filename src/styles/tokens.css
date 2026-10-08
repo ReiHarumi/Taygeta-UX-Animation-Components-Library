@@ -169,8 +169,36 @@
   --breakpoint-mobile: 0;
 }
 
+/* Dark semantic values. A page may force a theme with data-theme on <html>: "dark" applies these, "light" keeps the
+   light defaults, and with no data-theme the system preference decides (same pattern as the legal pages' tpl.html). */
+:root[data-theme="dark"] {
+  --color-surface-action: #6c9b7d;
+  --color-surface-secondary: #a3a3a3;
+  --color-surface-tertiary: #7495ff;
+  --color-surface-default: #212529;
+  --color-surface-elevated: #343a40;
+  --color-surface-muted: #495057;
+  --color-surface-success: #15803d;
+  --color-surface-warning: #ca8a04;
+  --color-surface-error: #b91c1c;
+  --color-surface-info: #1d4ed8;
+  --color-text-primary: #f8fafb;
+  --color-text-secondary: #e9ecef;
+  --color-text-tertiary: #dee2e6;
+  --color-text-inverted: #212529;
+  --color-border-default: #495057;
+  --color-border-subtle: #343a40;
+  --color-border-strong: #868e96;
+  --color-border-field: #868e96;
+  --color-focus-ring: #6c9b7d;
+  --color-success-text: #dcfce7;
+  --color-warning-text: #fef3c7;
+  --color-error-text: #fee2e2;
+  --color-info-text: #dbeafe;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --color-surface-action: #6c9b7d;
     --color-surface-secondary: #a3a3a3;
     --color-surface-tertiary: #7495ff;

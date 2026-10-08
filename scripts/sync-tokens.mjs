@@ -5,7 +5,8 @@
 //   node scripts/sync-tokens.mjs          rewrite tokens.css
 //   node scripts/sync-tokens.mjs --check  exit 1 if tokens.css drifts from the spec
 //
-// Generated: the @theme primitive block, the :root block and the dark block.
+// Generated: the @theme primitive block, the :root block and the dark blocks (forced by data-theme="dark", or
+// following prefers-color-scheme unless data-theme="light").
 // Hand-maintained: everything after the HAND_MARKER line (the @theme inline aliases).
 import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -72,8 +73,14 @@ ${lines(themeDecls, '  ')}
 ${lines(rootDecls, '  ')}
 }
 
+/* Dark semantic values. A page may force a theme with data-theme on <html>: "dark" applies these, "light" keeps the
+   light defaults, and with no data-theme the system preference decides (same pattern as the legal pages' tpl.html). */
+:root[data-theme="dark"] {
+${lines(dark, '  ')}
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
 ${lines(dark, '    ')}
   }
 }
