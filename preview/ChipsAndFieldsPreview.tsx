@@ -116,6 +116,13 @@ export function ChipSection() {
           <FilterChip pressed onPressedChange={() => {}} label="Harbor site" count="14:45" leading={<Dot tone={DOT_COLOURS[2]} />} trailing={<AlertCircle size={14} strokeWidth={1.5} aria-hidden="true" />} accessibleName="Harbor site, 14:45, has a conflict" />
         </div>
       </State>
+      <State name="20px leading marker: idle and pressed, same width (sm and md)">
+        <div className="flex flex-wrap gap-2 p-1">
+          <FilterChip pressed={false} onPressedChange={() => {}} label="Atlas rebrand" count="31:20" leading={<span className="block h-5 w-5 rounded-full" style={{ background: DOT_COLOURS[0] }} />} />
+          <FilterChip pressed onPressedChange={() => {}} label="Atlas rebrand" count="31:20" leading={<span className="block h-5 w-5 rounded-full" style={{ background: DOT_COLOURS[0] }} />} />
+          <FilterChip pressed={false} size="md" onPressedChange={() => {}} label="Atlas rebrand" count="31:20" leading={<span className="block h-5 w-5 rounded-full" style={{ background: DOT_COLOURS[0] }} />} />
+        </div>
+      </State>
       <State name="Truncated label (128px, title on hover)">
         <div className="flex flex-wrap gap-2 p-1">
           <FilterChip pressed={false} onPressedChange={() => {}} label="Pilot onboarding with a very long project name" count="6:30" leading={<Dot tone={DOT_COLOURS[3]} />} />

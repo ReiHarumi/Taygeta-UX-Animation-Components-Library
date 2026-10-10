@@ -13,8 +13,9 @@ export interface FilterChipProps {
   /** Trailing tally, formatted by the caller (for example "7:56"). Tabular figures. `undefined`: no tally. */
   count?: string;
   /**
-   * Idle leading-slot content, usually a 12px dot. When `pressed` the slot shows a 14px check
-   * instead. The slot is 14px wide whenever this is set. `undefined`: no slot (unless `stableWidth`).
+   * Idle leading-slot content, usually the 20px project marker (a smaller dot also fits). When
+   * `pressed` the slot shows a 14px check, centred, instead. The slot is 20px square whenever this
+   * is set. `undefined`: no slot (unless `stableWidth`, which reserves a 14px slot).
    */
   leading?: ReactNode;
   /**
@@ -47,10 +48,16 @@ export interface FilterChipProps {
   ref?: Ref<HTMLButtonElement>;
 }
 
-/** Slot that holds the dot or the check: 14px wide (design_spec §9 Chip). */
+/**
+ * Slot that holds the leading node or the check (design_spec §9 Chip). 20px square when `leading`
+ * is set (fits the 20px project marker), 14px otherwise; the 14px check centres in either.
+ */
 function Slot({ pressed, leading }: { pressed: boolean; leading?: ReactNode }) {
   return (
-    <span aria-hidden="true" className="inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center">
+    <span
+      aria-hidden="true"
+      className={`inline-flex shrink-0 items-center justify-center ${leading != null ? 'h-5 w-5' : 'h-3.5 w-3.5'}`}
+    >
       {pressed ? <Check size={14} strokeWidth={1.5} /> : leading}
     </span>
   );
