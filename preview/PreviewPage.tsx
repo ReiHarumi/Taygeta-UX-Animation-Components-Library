@@ -233,6 +233,12 @@ function SelectorSection() {
   const [tags, setTags] = useState<string[]>(['ana', 'ella']);
   const [time, setTime] = useState('17:30');
   const [badTime, setBadTime] = useState('25:00');
+  const [tfCompact, setTfCompact] = useState('');
+  const [tf24, setTf24] = useState('18:45');
+  const [tfHint, setTfHint] = useState('');
+  const [tfErr, setTfErr] = useState('');
+  const [tfInc, setTfInc] = useState('');
+  const [tfStatus, setTfStatus] = useState('empty');
   const [day, setDay] = useState<string | null>('2026-08-20');
   const [range, setRange] = useState<DateRange | null>({ start: '2026-08-16', end: '2026-08-31' });
   return (
@@ -254,6 +260,22 @@ function SelectorSection() {
       </State>
       <State name="Time field, invalid">
         <TimeField label="Clock in" value={badTime} onChange={setBadTime} invalid />
+      </State>
+      <State name="Time field, compact">
+        <TimeField label="Start time" size="compact" value={tfCompact} onChange={setTfCompact} />
+      </State>
+      <State name="Time field, 24-hour">
+        <TimeField label="End time" size="compact" hourCycle="24" value={tf24} onChange={setTf24} />
+      </State>
+      <State name="Time field, compact, hint">
+        <TimeField label="Start time" size="compact" hint="Use the time you began." value={tfHint} onChange={setTfHint} />
+      </State>
+      <State name="Time field, compact, error">
+        <TimeField label="Start time" size="compact" error="Enter a start time." value={tfErr} onChange={setTfErr} />
+      </State>
+      <State name="Time field, incomplete (type 09:3)">
+        <TimeField label="Start time" size="compact" value={tfInc} onChange={setTfInc} onStatusChange={setTfStatus} />
+        <p className="text-xs text-text-secondary">Status: {tfStatus}</p>
       </State>
       <State name="Date field, single">
         <DateField mode="single" label="Date" value={day} onChange={setDay} align="start" />
