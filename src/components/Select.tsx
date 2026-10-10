@@ -66,8 +66,8 @@ export function Select({
         aria-invalid={tone === 'error' ? true : undefined}
         aria-describedby={describedBy(hasText(hint) && hintId, messageTone === 'error' && errorId, callerDescribedBy)}
         className={[
-          // Native appearance is kept (OS picker); only a chevron is drawn over the right padding.
-          'block w-full min-w-0 rounded-lg border pl-(--space-2) pr-8 text-text-primary',
+          // appearance-none hides the native arrow (the OS picker still opens); our chevron is drawn over the right padding.
+          'block w-full min-w-0 appearance-none rounded-lg border pl-(--space-2) pr-8 text-text-primary',
           compact ? 'h-10 text-base tablet:h-8 tablet:text-xs' : 'h-10 text-(length:--font-size-body)',
           TONE_BORDER[tone],
           disabled ? 'cursor-not-allowed bg-surface-default text-text-tertiary' : 'cursor-pointer bg-surface-elevated',

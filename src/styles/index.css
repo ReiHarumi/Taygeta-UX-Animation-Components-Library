@@ -1,5 +1,18 @@
 /* @polaris/ui stylesheet. Consumers import this once, after `@import "tailwindcss";`,
    and add `@source "<path-to>/polaris-ui/src";` so Tailwind scans the components. */
 @import "./tokens.css";
+
+/* Dark variant: dark when <html data-theme="dark">, or when there is no data-theme and the system is dark;
+   data-theme="light" always wins. Same rule as tokens.css and polaris-app. */
+@custom-variant dark {
+  &:where([data-theme="dark"], [data-theme="dark"] *) {
+    @slot;
+  }
+  @media (prefers-color-scheme: dark) {
+    &:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *) {
+      @slot;
+    }
+  }
+}
 @import "taygeta-ux-animation-components/text-sweep.css";
 @import "./input.css";
