@@ -80,6 +80,23 @@ export type MultiSelectDropdownProps = {
   popupAlign?: 'stretch' | 'left' | 'right';
   /** Tailwind width classes for the popup when `popupAlign` is `left` or `right`. Defaults to `w-56`. */
   popupWidth?: string;
+  /**
+   * Fixed visible text on the trigger. When set, the trigger shows this text whatever is
+   * selected (no summary, no "N selected"). `undefined`: the trigger shows the selection summary.
+   * Ignored when `triggerDisplay` is `chips`.
+   */
+  triggerLabel?: string;
+  /**
+   * Fixed accessible name of the trigger (for example "3 more projects"). `undefined`: the
+   * name is built from `label` and the selection summary ("Team, 2 selected").
+   */
+  triggerAriaLabel?: string;
+  /**
+   * Trigger look. `field` (default): the form-field trigger. `chip`: the design_spec §9 idle
+   * Chip look (pill, surface-elevated fill, border-default edge, 12px/500 label) at 32px (`sm`)
+   * or 40px (`md`) with a trailing 14px `ChevronDown`. Ignored when `triggerDisplay` is `chips`.
+   */
+  triggerVariant?: 'field' | 'chip';
 };
 
 const OPTION = 'input[data-ms-option]';
@@ -114,6 +131,9 @@ export default function MultiSelectDropdown({
   popupLabel,
   popupAlign = 'stretch',
   popupWidth = 'w-56',
+  triggerLabel,
+  triggerAriaLabel,
+  triggerVariant = 'field',
 }: MultiSelectDropdownProps) {
   const [open, setOpen] = useState(false);
   const [internal, setInternal] = useState<string[]>(defaultValue);
@@ -181,7 +201,9 @@ export default function MultiSelectDropdown({
       : selected.length === 1
         ? labelOf(selected[0]) ?? placeholder
         : `${selected.length} selected`;
-  const triggerName = `${label}, ${selected.length === 0 ? 'none selected' : summary}`;
+  const triggerName = triggerAriaLabel ?? `${label}, ${selected.length === 0 ? 'none selected' : summary}`;
+  const chipLook = triggerVariant === 'chip';
+  const shownText = triggerLabel ?? summary;
 
   const onRootKeyDown = (e: React.KeyboardEvent) => {
     if (e.key !== 'Escape' || !open) return;
@@ -248,7 +270,7 @@ export default function MultiSelectDropdown({
   const chevron = (
     <ChevronDown
       aria-hidden="true"
-      className={`w-3.5 h-3.5 shrink-0 text-text-secondary transition-transform duration-150 motion-reduce:transition-none ${
+      className={`w-3.5 h-3.5 shrink-0 ${chipLook ? 'text-text-primary' : 'text-text-secondary'} transition-transform duration-150 motion-reduce:transition-none ${
         open ? 'rotate-180' : ''
       }`}
     />
@@ -259,7 +281,7 @@ export default function MultiSelectDropdown({
       ref={rootRef}
       onKeyDown={onRootKeyDown}
       onBlur={onRootBlur}
-      className={`relative w-full max-w-sm ${className}`}
+      className={`relative ${chipLook && !chips ? 'inline-block' : 'w-full max-w-sm'} ${className}`}
     >
       {chips ? (
         <ChipsTrigger
@@ -285,11 +307,15 @@ export default function MultiSelectDropdown({
           aria-controls={open ? panelId : undefined}
           aria-label={triggerName}
           onClick={() => (open ? close(true) : setOpen(true))}
-          className={`flex w-full items-center justify-between gap-2 ${size === 'md' ? 'h-10' : 'h-8'} px-3 rounded-lg border border-border-field bg-surface-elevated ${text} font-semibold text-left hover:border-border-field transition-colors motion-reduce:transition-none ${focusRing} ${
-            selected.length ? 'text-text-primary' : 'text-text-secondary'
-          }`}
+          className={
+            chipLook
+              ? `inline-flex items-center gap-2 ${size === 'md' ? 'h-10' : 'h-8'} px-3 rounded-full border border-border-default bg-surface-elevated hover:bg-surface-muted text-xs font-medium text-text-primary transition-colors duration-(--duration-fast) motion-reduce:transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--color-focus-ring)`
+              : `flex w-full items-center justify-between gap-2 ${size === 'md' ? 'h-10' : 'h-8'} px-3 rounded-lg border border-border-field bg-surface-elevated ${text} font-semibold text-left hover:border-border-field transition-colors motion-reduce:transition-none ${focusRing} ${
+                  selected.length ? 'text-text-primary' : 'text-text-secondary'
+                }`
+          }
         >
-          <span className="truncate">{summary}</span>
+          <span className="truncate">{shownText}</span>
           {chevron}
         </button>
       )}

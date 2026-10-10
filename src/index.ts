@@ -10,6 +10,20 @@ export type { RadioProps, RadioGroupProps, RadioOption } from './components/Radi
 export { Switch } from './components/Switch';
 export type { SwitchProps } from './components/Switch';
 
+// Form-field additions (Timesheet spec L-3..L-5)
+export { FieldGroup } from './components/FieldGroup';
+export type { FieldGroupProps } from './components/FieldGroup';
+export { Select } from './components/Select';
+export type { SelectProps } from './components/Select';
+export { IconButton } from './components/IconButton';
+export type { IconButtonProps } from './components/IconButton';
+
+// Filter chips (Time Tracker spec §12)
+export { FilterChip } from './components/FilterChip';
+export type { FilterChipProps } from './components/FilterChip';
+export { ChipGroup } from './components/ChipGroup';
+export type { ChipGroupProps, ChipGroupItem } from './components/ChipGroup';
+
 // Ported from Timer MVP on 2026-09-25 (copies; Timer keeps its own)
 export { default as Checkbox } from './components/Checkbox';
 export type { CheckboxProps } from './components/Checkbox';

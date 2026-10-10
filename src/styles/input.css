@@ -14,3 +14,14 @@
   /* Autofill is covered with the field's own fill (design_spec §2 surface-elevated). */
   --text-sweep-autofill-bg: var(--color-surface-elevated);
 }
+
+/* Compact Input (Timesheet L-1): the text size comes from the frame (16px phones, 12px from 768). */
+.pui-sweep-compact {
+  font-size: inherit;
+}
+
+/* IconButton sm hover (Timesheet L-5): text-primary at 10%, which is neutral-900/10 in light and
+   the light neutral at 10% in dark, because --color-text-primary flips with the theme. */
+.pui-iconbtn-sm:hover:not([aria-disabled="true"]) {
+  background-color: color-mix(in srgb, var(--color-text-primary) 10%, transparent);
+}

@@ -13,7 +13,7 @@ import {
 } from 'react';
 import { Search, type LucideIcon } from 'lucide-react';
 import { SweepInput } from 'taygeta-ux-animation-components';
-import { FieldMessages, LABEL_CLASS, TONE_BORDER, describedBy, fieldTone, hasText } from './field/field';
+import { COMPACT_LABEL_CLASS, FieldMessages, LABEL_CLASS, TONE_BORDER, describedBy, fieldTone, hasText } from './field/field';
 
 type NativeInputProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
@@ -23,8 +23,13 @@ type NativeInputProps = Omit<
 export interface InputProps extends NativeInputProps {
   /** Input type. `search` adds a leading Search icon (and ignores `prefix`). Defaults to `text`. */
   type?: 'text' | 'email' | 'password' | 'number' | 'search';
-  /** `default`: 40px tall, 16px icons. `large`: 48px tall, 20px icons (design_spec §9, §8). Defaults to `default`. */
-  size?: 'default' | 'large';
+  /**
+   * `default`: 40px tall, 16px icons. `large`: 48px tall, 20px icons (design_spec §9, §8).
+   * `compact`: for dense forms; 40px tall with 16px text under 768, 32px tall with 12px text
+   * from 768 up, 14px icons, 12px/600 label in text-primary and a 14px alert icon before the
+   * error message (Timesheet spec L-1). Defaults to `default`.
+   */
+  size?: 'default' | 'large' | 'compact';
   /**
    * Controlled value. Pass with `onChange`. Leave `undefined` to let the field hold its own
    * draft (optionally seeded by `defaultValue`).
@@ -48,6 +53,12 @@ export interface InputProps extends NativeInputProps {
   error?: ReactNode;
   /** `true` shows the success border. Ignored while `error` is set. */
   success?: boolean;
+  /**
+   * `true` draws the error edge and sets `aria-invalid="true"` without a message of its own.
+   * Use it when a `FieldGroup` shows the error for several fields. Also wins over a caller
+   * `aria-invalid`. `undefined` or `false`: the state follows `error` alone.
+   */
+  invalid?: boolean;
   /** Lucide icon drawn before the text, decorative (`aria-hidden`). Sized and stroked here (1.5, §8). */
   prefix?: LucideIcon;
   /** Lucide icon drawn after the text, decorative (`aria-hidden`). */
@@ -78,6 +89,7 @@ export function Input({
   hint,
   error,
   success,
+  invalid,
   prefix,
   suffix,
   animated = true,
@@ -105,9 +117,11 @@ export function Input({
   const frameRef = useRef<HTMLDivElement>(null);
   const sweep = animated && type !== 'password' && type !== 'number';
 
-  const tone = fieldTone(error, success);
+  const messageTone = fieldTone(error, success);
+  const tone = invalid && messageTone !== 'error' ? 'error' : messageTone;
   const large = size === 'large';
-  const iconSize = large ? 20 : 16;
+  const compact = size === 'compact';
+  const iconSize = large ? 20 : compact ? 14 : 16;
   const LeadIcon = type === 'search' ? Search : prefix;
   const TrailIcon = suffix;
 
@@ -126,7 +140,7 @@ export function Input({
     disabled,
     onChange: handleChange,
     'aria-invalid': tone === 'error' ? true : undefined,
-    'aria-describedby': describedBy(hasText(hint) && hintId, tone === 'error' && errorId, callerDescribedBy),
+    'aria-describedby': describedBy(hasText(hint) && hintId, messageTone === 'error' && errorId, callerDescribedBy),
     // Transparent, borderless: the frame draws the box. Placeholder in text-secondary, as the ported selectors.
     className:
       'block h-full w-full min-w-0 border-0 bg-transparent p-0 text-text-primary placeholder:text-text-secondary outline-none disabled:cursor-not-allowed disabled:text-text-tertiary',
@@ -135,7 +149,7 @@ export function Input({
   return (
     <div className={`flex min-w-0 flex-col gap-(--space-1) ${className}`}>
       {hasText(label) && (
-        <label htmlFor={inputId} className={LABEL_CLASS}>
+        <label htmlFor={inputId} className={compact ? COMPACT_LABEL_CLASS : LABEL_CLASS}>
           {label}
         </label>
       )}
@@ -145,7 +159,8 @@ export function Input({
         className={[
           // design_spec §9: 40px default, 48px large. §4 --space-1 gap, --space-2 horizontal padding.
           'flex w-full min-w-0 items-center gap-(--space-1) px-(--space-2)',
-          large ? 'h-12' : 'h-10',
+          // Compact (L-1): 40px / 16px text on phones, 32px / 12px text from 768 (--breakpoint-tablet).
+          large ? 'h-12' : compact ? 'h-10 text-base tablet:h-8 tablet:text-xs' : 'h-10',
           // Ported selectors' trigger: rounded-lg (§5 --radius-lg 6px), border, cursor text.
           'rounded-lg border cursor-text',
           'transition-colors duration-(--duration-fast) ease-(--ease-standard)',
@@ -167,14 +182,14 @@ export function Input({
             // SweepInput forwards the ref to its native <input> (Taygeta 5f5628d).
             ref={ref}
             value={current}
-            shellClassName="pui-sweep h-full flex-1"
+            shellClassName={`pui-sweep ${compact ? 'pui-sweep-compact ' : ''}h-full flex-1`}
             // design_spec §7 --duration-fast (150ms). A number prop, so the token cannot be read here.
             exitDuration={150}
             // design_spec §7: reduced motion preserves motion as specified.
             reducedMotion="ignore"
           />
         ) : (
-          <div className="pui-sweep h-full min-w-0 flex-1">
+          <div className={`pui-sweep ${compact ? 'pui-sweep-compact ' : ''}h-full min-w-0 flex-1`}>
             <input {...nativeProps} ref={ref} value={current} />
           </div>
         )}
@@ -182,7 +197,13 @@ export function Input({
           <TrailIcon aria-hidden="true" size={iconSize} strokeWidth={1.5} className="shrink-0 text-text-secondary" />
         )}
       </div>
-      <FieldMessages hintId={hintId} errorId={errorId} hint={hint} error={tone === 'error' ? error : undefined} />
+      <FieldMessages
+        hintId={hintId}
+        errorId={errorId}
+        hint={hint}
+        error={messageTone === 'error' ? error : undefined}
+        compact={compact}
+      />
     </div>
   );
 }

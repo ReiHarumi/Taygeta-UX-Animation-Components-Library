@@ -1,6 +1,7 @@
 // Shared field parts for Input, Textarea and RadioGroup: the label above the control and
 // the hint / error text below it. Internal to @polaris/ui (not exported from the barrel).
 import type { ReactNode } from 'react';
+import { AlertCircle } from 'lucide-react';
 
 /** Visual state of a text field's frame. Error wins over success. */
 export type FieldTone = 'default' | 'error' | 'success';
@@ -19,6 +20,10 @@ export function describedBy(...ids: Array<string | undefined | false>): string |
 // design_spec §3 Label: Public Sans 500, --font-size-label, line-height 1.5; §2 text-secondary "labels".
 export const LABEL_CLASS =
   'block text-(length:--font-size-label) leading-(--line-height-normal) font-medium text-text-secondary';
+
+// Compact label (Timesheet spec L-1): 12px/600 text-primary, line-height 1.5.
+export const COMPACT_LABEL_CLASS =
+  'block text-xs font-semibold leading-(--line-height-normal) text-text-primary';
 
 // design_spec §3 Body Small: --font-size-body-sm, line-height 1.5.
 const MESSAGE_CLASS = 'text-(length:--font-size-body-sm) leading-(--line-height-normal)';
@@ -39,20 +44,28 @@ interface FieldMessagesProps {
   errorId: string;
   hint?: ReactNode;
   error?: ReactNode;
+  /** Compact messages (L-1): 12px text, error with a leading 14px `AlertCircle`. Defaults to `false`. */
+  compact?: boolean;
 }
 
 /** Hint then error, below the control. The error is announced when it appears (`role="alert"` is avoided so it is not re-read on every render; `aria-live="polite"` instead). */
-export function FieldMessages({ hintId, errorId, hint, error }: FieldMessagesProps) {
+export function FieldMessages({ hintId, errorId, hint, error, compact = false }: FieldMessagesProps) {
   const hasError = error != null && error !== false && error !== '';
+  const size = compact ? 'text-xs leading-(--line-height-normal)' : MESSAGE_CLASS;
   return (
     <>
       {hint != null && hint !== '' && (
-        <p id={hintId} className={`${MESSAGE_CLASS} text-text-secondary`}>
+        <p id={hintId} className={`${size} text-text-secondary`}>
           {hint}
         </p>
       )}
-      <p id={errorId} aria-live="polite" className={`${MESSAGE_CLASS} text-error-text ${hasError ? '' : 'sr-only'}`}>
-        {hasError ? error : null}
+      <p
+        id={errorId}
+        aria-live="polite"
+        className={`${size} text-error-text ${hasError ? (compact ? 'flex items-start gap-1' : '') : 'sr-only'}`}
+      >
+        {hasError && compact && <AlertCircle aria-hidden="true" size={14} strokeWidth={1.5} className="mt-0.5 shrink-0" />}
+        {hasError ? (compact ? <span>{error}</span> : error) : null}
       </p>
     </>
   );

@@ -14,6 +14,7 @@ import {
   TimeField,
   type DateRange,
 } from '../src';
+import { ChipGroupSection, ChipSection, FieldAdditionsSection } from './ChipsAndFieldsPreview';
 
 const LONG_VALUE =
   'maria.clara.de.los.santos-villanueva.operations.and.payroll@polaris-multidisciplinary-business-systems.example.ph';
@@ -279,6 +280,9 @@ export default function UiPreviewPage() {
       <RadioSection />
       <SwitchSection />
       <SelectorSection />
+      <FieldAdditionsSection />
+      <ChipSection />
+      <ChipGroupSection />
     </main>
   );
 }
