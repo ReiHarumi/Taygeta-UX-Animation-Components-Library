@@ -27,6 +27,11 @@ interface DateFieldBase {
   dialogLabel?: string;
   /** How one ISO date is shown in the picker's summary cells. Defaults to `DD/MM/YYYY`. Display only. */
   formatDay?: (iso: string) => string;
+  /**
+   * Opt-in. `true` keeps the popover fully inside the nearest dialog: opens upward when
+   * below is short, and shrinks to a compact size when neither side fits. Defaults to `false`.
+   */
+  fitWithin?: boolean;
   /** Extra classes on the wrapper, for layout (width, grid placement). */
   className?: string;
   /** Id for the trigger button, so a form can move focus to it (e.g. the first invalid field). */
@@ -118,6 +123,7 @@ export default function DateField(props: DateFieldProps) {
           dialogLabel={dialogLabel}
           formatDay={formatDay}
           autoFocusGrid
+          fitWithin={props.fitWithin}
         />
       ) : (
         <WeekCalendarPicker
@@ -129,6 +135,7 @@ export default function DateField(props: DateFieldProps) {
           dialogLabel={dialogLabel}
           formatDay={formatDay}
           autoFocusGrid
+          fitWithin={props.fitWithin}
         />
       ))}
     </div>

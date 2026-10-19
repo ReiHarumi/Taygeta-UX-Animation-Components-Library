@@ -3,7 +3,7 @@
 // math lives in lib/dates.ts (G10); this file re-exports it for the View files
 // that already call these names, and holds the picker markup plus the
 // view-local keyboard navigation for the date grid (APG date-grid pattern).
-import React, { useEffect, useId, useRef, useState } from 'react';
+import React, { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import {
   MONTH_SHORT, MONTH_LONG, isoToDate, toIso, weekDatesFrom, mondayOf,
@@ -102,8 +102,10 @@ const DOW = [
 ];
 
 export function MonthGrid({
-  year, month, range, focusDate, onDayClick, onDayKeyDown,
+  year, month, range, focusDate, onDayClick, onDayKeyDown, compact = false,
 }: {
+  /** `true` shrinks the grid (smaller cells, 168px wide) for tight containers. Defaults to `false`. */
+  compact?: boolean;
   year: number; month: number;
   /** Highlighted span, or null for none. */
   range: DateRange | null;
@@ -129,20 +131,20 @@ export function MonthGrid({
   const rows = Array.from({ length: cells.length / 7 }, (_, r) => cells.slice(r * 7, r * 7 + 7));
 
   return (
-    <div className="w-[196px]">
-      <p id={headingId} aria-live="polite" className="text-center text-caption font-bold text-text-secondary mb-1.5 tracking-wide">
+    <div className={compact ? 'w-[168px]' : 'w-[196px]'}>
+      <p id={headingId} aria-live="polite" className={`text-center text-caption font-bold text-text-secondary tracking-wide ${compact ? 'mb-0.5' : 'mb-1.5'}`}>
         {MONTH_LONG[month]} {year}
       </p>
       <div role="grid" aria-labelledby={headingId}>
         <div role="row" className="grid grid-cols-7">
           {DOW.map((d) => (
-            <div key={d.short} role="columnheader" aria-label={d.long} className="h-7 flex items-center justify-center text-caption-sm text-text-secondary font-semibold">{d.short}</div>
+            <div key={d.short} role="columnheader" aria-label={d.long} className={`${compact ? 'h-6' : 'h-7'} flex items-center justify-center text-caption-sm text-text-secondary font-semibold`}>{d.short}</div>
           ))}
         </div>
         {rows.map((row, r) => (
           <div key={r} role="row" className="grid grid-cols-7">
             {row.map((cell, i) => {
-              if (!cell) return <div key={i} role="gridcell" className="h-7" />;
+              if (!cell) return <div key={i} role="gridcell" className={compact ? 'h-6' : 'h-7'} />;
               const { day, ds } = cell;
               const inRange = !!range && ds >= range.start && ds <= range.end;
               const isStart = !!range && range.start === ds;
@@ -154,7 +156,7 @@ export function MonthGrid({
                   key={i}
                   role="gridcell"
                   aria-selected={inRange}
-                  className={`relative flex items-center justify-center h-7
+                  className={`relative flex items-center justify-center ${compact ? 'h-6' : 'h-7'}
                     ${isMid || isStart || isEnd ? 'bg-bay-leaf-100' : ''}
                     ${isStart ? 'rounded-l-full' : ''}
                     ${isEnd ? 'rounded-r-full' : ''}
@@ -169,7 +171,7 @@ export function MonthGrid({
                     onClick={() => onDayClick(ds)}
                     onKeyDown={(e) => onDayKeyDown(e, ds)}
                     className={`
-                      w-7 h-7 flex items-center justify-center rounded-full text-caption transition-colors cursor-pointer select-none
+                      ${compact ? 'w-6 h-6 text-caption-sm' : 'w-7 h-7 text-caption'} flex items-center justify-center rounded-full transition-colors cursor-pointer select-none
                       focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-bay-leaf-600
                       ${isStart || isEnd ? 'bg-bay-leaf-300 dark:bg-bay-leaf-200 text-bay-leaf-900 font-bold hover:bg-bay-leaf-200 dark:hover:bg-bay-leaf-100' : ''}
                       ${!inRange && !isToday ? 'text-text-secondary hover:bg-bay-leaf-100 hover:text-bay-leaf-900' : ''}
@@ -206,6 +208,15 @@ interface SharedPickerProps {
    * Defaults to `DD/MM/YYYY`. Display only.
    */
   formatDay?: (iso: string) => string;
+  /**
+   * Opt-in. `true` keeps the popover inside the rect of its nearest `role="dialog"` ancestor:
+   * it opens downward, flips upward when below is short, and if neither side fits it switches
+   * to a compact size (smaller cells, padding). It also shifts sideways to stay inside, follows
+   * its trigger on scroll, and is not clipped by a scrolling panel. Uses the anchored popover
+   * at every width, not the mobile sheet. Its parent element is the anchor (DateField provides it). Defaults to `false`:
+   * original placement, size and mobile sheet unchanged.
+   */
+  fitWithin?: boolean;
 }
 
 /** Week mode (Dashboard): any day click snaps to its Monday–Sunday week. Unchanged contract. */
@@ -267,6 +278,64 @@ export function WeekCalendarPicker(props: WeekCalendarPickerProps) {
   const [focusDate, setFocusDate] = useState(anchor);
   const rootRef = useRef<HTMLDivElement>(null);
   const moveFocusRef = useRef(false);
+
+  // fitWithin: position:fixed, placed from the trigger rect and clamped to the dialog rect.
+  // Fixed (not absolute) so a scrolling panel between trigger and dialog cannot clip it.
+  const [compactFit, setCompactFit] = useState(false);
+  const fitWithin = !!props.fitWithin;
+  const compact = fitWithin && compactFit;
+  const naturalH = useRef(0);
+
+  useLayoutEffect(() => {
+    if (!fitWithin) return;
+    const el = rootRef.current;
+    const host = el?.parentElement;
+    if (!el || !host) return;
+    const align = props.align;
+    const place = () => {
+      const dlg = host.closest('[role="dialog"]') as HTMLElement | null;
+      const b = dlg
+        ? dlg.getBoundingClientRect()
+        : ({ top: 0, bottom: window.innerHeight, left: 0, right: window.innerWidth } as DOMRect);
+      const pad = 8, gap = 4;
+      const t = host.getBoundingClientRect();
+      if (!compactFit) naturalH.current = el.offsetHeight;
+      const below = b.bottom - pad - t.bottom - gap;
+      const above = t.top - gap - (b.top + pad);
+      const needCompact = naturalH.current > Math.max(below, above);
+      if (needCompact !== compactFit) { setCompactFit(needCompact); return; }
+      const h = el.offsetHeight, w = el.offsetWidth;
+      let top = h <= below || (h > above && below >= above) ? t.bottom + gap : t.top - gap - h;
+      top = Math.min(Math.max(top, b.top + pad), b.bottom - pad - h);
+      let left = align === 'start' ? t.left : t.right - w;
+      let rightLimit = b.right - pad;
+      // Keep clear of the nearest scroll container's scrollbar track (track left edge - 4px;
+      // else the scroller's right edge - the 26px scroll gutter).
+      let sc: HTMLElement | null = host.parentElement;
+      while (sc && sc !== document.body) {
+        const oy = getComputedStyle(sc).overflowY;
+        if (sc.hasAttribute('data-overlayscrollbars-viewport') || oy === 'auto' || oy === 'scroll') break;
+        sc = sc.parentElement;
+      }
+      if (sc && sc !== document.body) {
+        const root = (sc.closest('[data-overlayscrollbars]') as HTMLElement | null) ?? sc.parentElement;
+        const track = root?.querySelector('.os-scrollbar-vertical .os-scrollbar-track, .os-scrollbar-vertical') as HTMLElement | null;
+        const tr = track?.getBoundingClientRect();
+        const edge = tr && tr.width > 0 ? tr.left : sc.getBoundingClientRect().right - 26;
+        rightLimit = Math.min(rightLimit, edge - gap);
+      }
+      left = Math.min(Math.max(left, b.left + pad), rightLimit - w);
+      // A transformed ancestor re-bases `fixed`; measure and correct the difference.
+      el.style.top = `${top}px`; el.style.left = `${left}px`;
+      const r = el.getBoundingClientRect();
+      if (Math.abs(r.top - top) > 0.5) el.style.top = `${top - (r.top - top)}px`;
+      if (Math.abs(r.left - left) > 0.5) el.style.left = `${left - (r.left - left)}px`;
+    };
+    place();
+    window.addEventListener('resize', place);
+    window.addEventListener('scroll', place, true);
+    return () => { window.removeEventListener('resize', place); window.removeEventListener('scroll', place, true); };
+  }, [fitWithin, compactFit, props.align]);
 
   const m2 = viewMonth === 11 ? 0 : viewMonth + 1;
   const y2 = viewMonth === 11 ? viewYear + 1 : viewYear;
@@ -379,13 +448,16 @@ export function WeekCalendarPicker(props: WeekCalendarPickerProps) {
 
   const dialogLabel = props.dialogLabel ?? (isSingle ? 'Choose date' : isRange ? 'Choose date range' : 'Choose week');
   const alignCls = props.align === 'start' ? 'lg:left-0' : 'lg:right-0';
+  const rootCls = fitWithin
+    ? 'fixed overflow-hidden'
+    : `fixed inset-x-4 top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto lg:absolute lg:inset-x-auto lg:max-h-none lg:top-full lg:mt-1 ${alignCls} lg:overflow-hidden`;
 
   return (
     <div
       ref={rootRef}
       role="dialog"
       aria-label={dialogLabel}
-      className={`fixed inset-x-4 top-20 max-h-[calc(100dvh-6rem)] overflow-y-auto lg:absolute lg:inset-x-auto lg:max-h-none lg:top-full lg:mt-1 ${alignCls} lg:overflow-hidden z-30 bg-surface-elevated rounded-xl border border-border-default shadow-lg flex flex-col lg:flex-row`}
+      className={`${rootCls} z-30 bg-surface-elevated rounded-xl border border-border-default shadow-lg flex flex-col lg:flex-row`}
     >
       {presetRail.length > 0 && (
       <div role="group" aria-label="Presets" className="w-full lg:w-36 border-b lg:border-b-0 lg:border-r border-neutral-100 py-1.5 shrink-0">
@@ -405,8 +477,8 @@ export function WeekCalendarPicker(props: WeekCalendarPickerProps) {
       </div>
       )}
 
-      <div className="p-4 self-center lg:self-auto">
-        <div className="flex items-center gap-2 mb-2">
+      <div className={`${compact ? 'p-2.5' : 'p-4'} self-center lg:self-auto`}>
+        <div className={`flex items-center gap-2 ${compact ? 'mb-1' : 'mb-2'}`}>
           {isSingle ? (
             <div className="flex items-center gap-1.5 border border-border-subtle rounded-lg px-2.5 py-1.5 bg-surface-default">
               <Calendar className="w-3.5 h-3.5 text-text-secondary shrink-0" aria-hidden="true" />
@@ -428,16 +500,16 @@ export function WeekCalendarPicker(props: WeekCalendarPickerProps) {
         </div>
 
         <div className="flex items-start gap-1">
-          <button type="button" aria-label="Previous month" onClick={prevMonth} className="p-1 mt-[22px] text-text-secondary hover:text-text-secondary hover:bg-surface-default rounded-lg transition-colors shrink-0">
+          <button type="button" aria-label="Previous month" onClick={prevMonth} className={`p-1 ${compact ? 'mt-[18px]' : 'mt-[22px]'} text-text-secondary hover:text-text-secondary hover:bg-surface-default rounded-lg transition-colors shrink-0`}>
             <ChevronLeft className="w-4 h-4" aria-hidden="true" />
           </button>
           <div className="flex flex-col sm:flex-row gap-2">
-            <MonthGrid year={viewYear} month={viewMonth} range={shown} focusDate={tabbable} onDayClick={handleDayClick} onDayKeyDown={handleDayKeyDown} />
+            <MonthGrid year={viewYear} month={viewMonth} range={shown} focusDate={tabbable} onDayClick={handleDayClick} onDayKeyDown={handleDayKeyDown} compact={compact} />
             {!isSingle && (
-              <MonthGrid year={y2} month={m2} range={shown} focusDate={tabbable} onDayClick={handleDayClick} onDayKeyDown={handleDayKeyDown} />
+              <MonthGrid year={y2} month={m2} range={shown} focusDate={tabbable} onDayClick={handleDayClick} onDayKeyDown={handleDayKeyDown} compact={compact} />
             )}
           </div>
-          <button type="button" aria-label="Next month" onClick={nextMonth} className="p-1 mt-[22px] text-text-secondary hover:text-text-secondary hover:bg-surface-default rounded-lg transition-colors shrink-0">
+          <button type="button" aria-label="Next month" onClick={nextMonth} className={`p-1 ${compact ? 'mt-[18px]' : 'mt-[22px]'} text-text-secondary hover:text-text-secondary hover:bg-surface-default rounded-lg transition-colors shrink-0`}>
             <ChevronRight className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>

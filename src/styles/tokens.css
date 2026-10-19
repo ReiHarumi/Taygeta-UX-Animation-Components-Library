@@ -95,7 +95,13 @@
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.12);
   --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-  --font-display: Althera;
+  --shadow-bevel-outer: inset 0 0 7.5px 4px rgba(0, 0, 0, 0.25);
+  --shadow-bevel-raise: 0 0 8.2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-bevel-inner: inset 0 0 5.3px 4px rgba(0, 0, 0, 0.25);
+  --shadow-bevel-field: inset 0 0 3.3px 2px rgba(0, 0, 0, 0.25);
+  --shadow-button-glow: 0 0 1.2px 1px rgba(35, 41, 36, 0.6);
+  --shadow-panel-inset: inset 0 0 10.6px 5px rgba(30, 30, 30, 0.4);
+  --font-display: "Public Sans";
   --font-brand: Bergola;
   --font-body: "Public Sans";
   --font-counter: "Departure Mono", ui-monospace, monospace;
@@ -146,6 +152,7 @@
   --space-9: 72px;
   --space-10: 80px;
   --radius-0: 0px;
+  --overlay-wash-light: rgba(255, 255, 255, 0.1);
   --duration-fast: 150ms;
   --duration-base: 250ms;
   --duration-slow: 400ms;
@@ -156,6 +163,14 @@
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+
+  /* Scrollbars (owner ruling 2026-10-13) */
+  --scrollbar-size: 6px;
+  --scrollbar-inset: 4px;
+  --scrollbar-clearance: 16px;
+  --scrollbar-gutter: 26px;
+  --scrollbar-hide-delay: 3000ms;
+
   --font-size-h1: clamp(2rem, 5vw, 3.5rem);
   --font-size-h2: clamp(1.75rem, 4vw, 2.5rem);
   --font-size-h3: clamp(1.5rem, 3vw, 1.875rem);
